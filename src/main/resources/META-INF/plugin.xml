@@ -1,18 +1,19 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.paulpanther.intellijsqueak</id>
-    <name>intellij-squeak</name>
+    <id>com.paulpanther.intellijsqueak</id>
+    <name>Squeak</name>
     <vendor>paulpanther</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.paulpanther.intellijsqueak.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.paulpanther.intellijsqueak.services.MyProjectService"/>
+        <fileType
+                name="Smalltalk File"
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkFileType"
+                language="Smalltalk"
+                extensions="st"/>
+        <moduleType
+            id="SMALLTALK_MODULE_TYPE"
+            implementationClass="com.paulpanther.intellijsqueak.SmalltalkModuleType"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.paulpanther.intellijsqueak.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
 </idea-plugin>
