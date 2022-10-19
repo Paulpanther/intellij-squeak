@@ -12,4 +12,6 @@ class SmalltalkModuleBuilder: ModuleBuilder() {
         context: WizardContext?,
         parentDisposable: Disposable?
     ) = SmalltalkModuleBuilderStep()
+
+    override fun getWeight() = 2000
 }

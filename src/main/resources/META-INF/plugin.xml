@@ -1,10 +1,10 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.paulpanther.intellijsqueak</id>
     <name>Squeak</name>
     <vendor>paulpanther</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType
@@ -12,8 +12,13 @@
                 implementationClass="com.paulpanther.intellijsqueak.SmalltalkFileType"
                 language="Smalltalk"
                 extensions="st"/>
-        <moduleType
-            id="SMALLTALK_MODULE_TYPE"
-            implementationClass="com.paulpanther.intellijsqueak.SmalltalkModuleType"/>
+        <moduleBuilder
+            builderClass="com.paulpanther.intellijsqueak.SmalltalkModuleBuilder"
+            id="SMALLTALK_MODULE_BUILDER"/>
+        <newProjectWizard.language
+                implementation="com.paulpanther.intellijsqueak.SmalltalkNewProjectWizard" />
+<!--        <moduleType-->
+<!--            id="SMALLTALK_MODULE_TYPE"-->
+<!--            implementationClass="com.paulpanther.intellijsqueak.SmalltalkModuleType"/>-->
     </extensions>
 </idea-plugin>
