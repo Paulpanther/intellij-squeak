@@ -13,17 +13,19 @@
                 language="Smalltalk"
                 extensions="st"/>
         <moduleBuilder
-            builderClass="com.paulpanther.intellijsqueak.SmalltalkModuleBuilder"
-            id="SMALLTALK_MODULE_BUILDER"/>
+                builderClass="com.paulpanther.intellijsqueak.SmalltalkModuleBuilder"
+                id="SMALLTALK_MODULE_BUILDER"/>
         <newProjectWizard.language
-                implementation="com.paulpanther.intellijsqueak.SmalltalkNewProjectWizard" />
+                implementation="com.paulpanther.intellijsqueak.SmalltalkNewProjectWizard"/>
         <lang.parserDefinition
-            implementationClass="com.paulpanther.intellijsqueak.lang.SmalltalkParserDefinition"
-            language="Smalltalk" />
+                implementationClass="com.paulpanther.intellijsqueak.lang.SmalltalkParserDefinition"
+                language="Smalltalk"/>
         <lang.syntaxHighlighterFactory
-            language="Smalltalk"
-            implementationClass="com.paulpanther.intellijsqueak.SmalltalkSyntaxHighlighterFactory" />
+                language="Smalltalk"
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkSyntaxHighlighterFactory"/>
         <colorSettingsPage
-                implementation="com.paulpanther.intellijsqueak.SmalltalkColorSettingsPage" />
+                implementation="com.paulpanther.intellijsqueak.SmalltalkColorSettingsPage"/>
+        <lang.refactoringSupport
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkRefactoringSupportProvider"/>
     </extensions>
 </idea-plugin>

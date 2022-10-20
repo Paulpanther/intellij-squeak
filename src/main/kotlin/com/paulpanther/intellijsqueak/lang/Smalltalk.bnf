@@ -1,5 +1,5 @@
 {
-    parserClass="com.paulpanther.intellijsqueak.lang.SmalltalkParserDefinition"
+    parserClass="com.paulpanther.intellijsqueak.lang.SmalltalkParser"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -11,6 +11,8 @@
     elementTypeHolderClass="com.paulpanther.intellijsqueak.lang.SmalltalkTypes"
     elementTypeClass="com.paulpanther.intellijsqueak.lang.SmalltalkElementType"
     tokenTypeClass="com.paulpanther.intellijsqueak.lang.SmalltalkTokenType"
+
+    psiImplUtilClass="com.paulpanther.intellijsqueak.lang.SmalltalkPsiImplUtil"
 
     extends(".*statement")=statement
       tokens=[
@@ -37,11 +39,13 @@
 
 file ::= method
 
-method ::= selector statement_body
+method ::= selector temporaries? statement_body
 
 private selector ::= unary_selector
 
-unary_selector ::= IDENTIFIER
+unary_selector ::= named_identifier
+
+temporaries ::= BLOCK_VARIABLE_SEPERATOR named_identifier+ BLOCK_VARIABLE_SEPERATOR
 
 multi_statement ::= statement (STATEMENT_SEPERATOR statement)*
 
@@ -51,9 +55,9 @@ expression ::= assignment | primary
 
 parenthesized_expression ::= PARENTHESIS_START expression PARENTHESIS_END
 
-assignment ::= IDENTIFIER ASSIGNMENT_OPERATOR expression
+assignment ::= variable ASSIGNMENT_OPERATOR expression
 
-private primary ::= IDENTIFIER
+private primary ::= variable
     | parenthesized_expression
     | NUMBER
     | STRING
@@ -65,4 +69,14 @@ private primary ::= IDENTIFIER
     | super
     | symbol
 
+variable ::= IDENTIFIER {
+    methods=[getReferences]
+}
+
 statement_body ::= multi_statement? STATEMENT_SEPERATOR?
+
+named_identifier ::= IDENTIFIER {
+    mixin="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElementImpl"
+    implements="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElement"
+    methods=[getName setName getNameIdentifier]
+}
