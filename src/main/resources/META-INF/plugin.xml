@@ -17,8 +17,13 @@
             id="SMALLTALK_MODULE_BUILDER"/>
         <newProjectWizard.language
                 implementation="com.paulpanther.intellijsqueak.SmalltalkNewProjectWizard" />
-<!--        <moduleType-->
-<!--            id="SMALLTALK_MODULE_TYPE"-->
-<!--            implementationClass="com.paulpanther.intellijsqueak.SmalltalkModuleType"/>-->
+        <lang.parserDefinition
+            implementationClass="com.paulpanther.intellijsqueak.lang.SmalltalkParserDefinition"
+            language="Smalltalk" />
+        <lang.syntaxHighlighterFactory
+            language="Smalltalk"
+            implementationClass="com.paulpanther.intellijsqueak.SmalltalkSyntaxHighlighterFactory" />
+        <colorSettingsPage
+                implementation="com.paulpanther.intellijsqueak.SmalltalkColorSettingsPage" />
     </extensions>
 </idea-plugin>

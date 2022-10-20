@@ -2,3 +2,5 @@
 .idea
 .qodana
 build
+src/main/gen
+src/main/kotlin/com/paulpanther/intellijsqueak/lang/_SmalltalkLexer.flex

@@ -1,0 +1,68 @@
+{
+    parserClass="com.paulpanther.intellijsqueak.lang.SmalltalkParserDefinition"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="Smalltalk"
+    psiImplClassSuffix="Impl"
+    psiPackage="com.paulpanther.intellijsqueak.lang"
+    psiImplPackage="com.paulpanther.intellijsqueak.lang.impl"
+
+    elementTypeHolderClass="com.paulpanther.intellijsqueak.lang.SmalltalkTypes"
+    elementTypeClass="com.paulpanther.intellijsqueak.lang.SmalltalkElementType"
+    tokenTypeClass="com.paulpanther.intellijsqueak.lang.SmalltalkTokenType"
+
+    extends(".*statement")=statement
+      tokens=[
+        LINE_TERMINATOR='regexp:\r|\n|\r\n'
+        WHITE_SPACE='regexp:\s+'
+        IDENTIFIER='regexp:[a-zA-Z_]\w*'
+        NUMBER='regexp:\d+'
+        KEYWORD='regexp:[a-zA-Z_]+:'
+        STRING="regexp:'[^']*'"
+        BINARY_OPERATOR="regexp:[*+\\\-/~<>@=,%&?!]+"
+        COMMENT='regexp:"[^"]*"'
+
+        STATEMENT_SEPERATOR='.'
+        PARENTHESIS_START='('
+        PARENTHESIS_END=')'
+        ASSIGNMENT_OPERATOR=':='
+        RETURN_OPERATOR='^'
+        BLOCK_VARIABLE_SEPERATOR='|'
+        BLOCK_START='['
+        BLOCK_END=']'
+        SYMBOL_START='#'
+      ]
+}
+
+file ::= method
+
+method ::= selector statement_body
+
+private selector ::= unary_selector
+
+unary_selector ::= IDENTIFIER
+
+multi_statement ::= statement (STATEMENT_SEPERATOR statement)*
+
+statement ::= expression
+
+expression ::= assignment | primary
+
+parenthesized_expression ::= PARENTHESIS_START expression PARENTHESIS_END
+
+assignment ::= IDENTIFIER ASSIGNMENT_OPERATOR expression
+
+private primary ::= IDENTIFIER
+    | parenthesized_expression
+    | NUMBER
+    | STRING
+    | block
+    | nil
+    | true
+    | false
+    | self
+    | super
+    | symbol
+
+statement_body ::= multi_statement? STATEMENT_SEPERATOR?
