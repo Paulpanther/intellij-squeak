@@ -1,5 +1,6 @@
 package com.paulpanther.intellijsqueak.lang
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
@@ -25,5 +26,14 @@ class SmalltalkTemporaryVariableReference(
         val node = (element as SmalltalkVariable).identifier.node as LeafPsiElement
         node.replaceWithText(newElementName)
         return element
+    }
+
+    override fun getVariants(): Array<Any> {
+        val method = element.getParentOfType<SmalltalkMethod>(true) ?: return arrayOf()
+        val temporaries = method.temporaries?.namedIdentifierList ?: return arrayOf()
+
+        return temporaries.map {
+            LookupElementBuilder.create(it)
+        }.toTypedArray()
     }
 }
