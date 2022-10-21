@@ -1,4 +1,5 @@
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -28,7 +29,7 @@ repositories {
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
@@ -57,6 +58,16 @@ qodana {
 }
 
 tasks {
+    properties("javaVersion").let {
+        withType<JavaCompile> {
+            sourceCompatibility = it
+            targetCompatibility = it
+        }
+        withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = it
+        }
+    }
+
     wrapper {
         gradleVersion = properties("gradleVersion")
     }

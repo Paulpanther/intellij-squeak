@@ -4,7 +4,6 @@
     <vendor>paulpanther</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType
@@ -27,5 +26,8 @@
                 implementation="com.paulpanther.intellijsqueak.SmalltalkColorSettingsPage"/>
         <lang.refactoringSupport
                 implementationClass="com.paulpanther.intellijsqueak.SmalltalkRefactoringSupportProvider"/>
+        <lang.findUsagesProvider
+                language="Smalltalk"
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkFindUsagesProvider"/>
     </extensions>
 </idea-plugin>

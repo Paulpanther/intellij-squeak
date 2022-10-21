@@ -5,15 +5,19 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import com.intellij.psi.util.findParentOfType
+import com.intellij.psi.util.parentOfType
 
+/**
+ * TODO maybe override getUseScope?
+ */
 class SmalltalkTemporaryVariableReference(
     element: SmalltalkVariable,
 ): PsiReferenceBase<PsiElement>(element, element.textRange) {
 
     override fun resolve(): PsiElement? {
         val method =
-            element.getParentOfType<SmalltalkMethod>(true) ?: return null
+            element.findParentOfType<SmalltalkMethod>(true) ?: return null
         val temporaries = method.temporaries?.namedIdentifierList ?: return null
         return temporaries.find { it.text == element.text }
     }
@@ -29,7 +33,7 @@ class SmalltalkTemporaryVariableReference(
     }
 
     override fun getVariants(): Array<Any> {
-        val method = element.getParentOfType<SmalltalkMethod>(true) ?: return arrayOf()
+        val method = element.findParentOfType<SmalltalkMethod>(true) ?: return arrayOf()
         val temporaries = method.temporaries?.namedIdentifierList ?: return arrayOf()
 
         return temporaries.map {

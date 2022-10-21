@@ -11,8 +11,6 @@ import com.paulpanther.intellijsqueak.SmalltalkLanguage
 
 class SmalltalkParserDefinition: ParserDefinition {
     companion object {
-//        val whiteSpace = TokenSet.create(SmalltalkTypes.WH)
-        val comment = TokenSet.create(SmalltalkTypes.COMMENT)
         val file = IFileElementType(SmalltalkLanguage)
     }
 
@@ -20,7 +18,7 @@ class SmalltalkParserDefinition: ParserDefinition {
     override fun createParser(project: Project?) = SmalltalkParser()
 
     override fun getFileNodeType() = file
-    override fun getCommentTokens() = comment
+    override fun getCommentTokens() = SmalltalkTokenSets.comment
     override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
 
     override fun createElement(node: ASTNode?): PsiElement =
