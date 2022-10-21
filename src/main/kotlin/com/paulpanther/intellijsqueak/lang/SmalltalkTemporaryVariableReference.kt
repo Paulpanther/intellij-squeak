@@ -18,7 +18,7 @@ class SmalltalkTemporaryVariableReference(
     override fun resolve(): PsiElement? {
         val method =
             element.findParentOfType<SmalltalkMethod>(true) ?: return null
-        val temporaries = method.temporaries?.namedIdentifierList ?: return null
+        val temporaries = method.temporaries?.temporaryList ?: return null
         return temporaries.find { it.text == element.text }
     }
 
@@ -34,7 +34,7 @@ class SmalltalkTemporaryVariableReference(
 
     override fun getVariants(): Array<Any> {
         val method = element.findParentOfType<SmalltalkMethod>(true) ?: return arrayOf()
-        val temporaries = method.temporaries?.namedIdentifierList ?: return arrayOf()
+        val temporaries = method.temporaries?.temporaryList ?: return arrayOf()
 
         return temporaries.map {
             LookupElementBuilder.create(it)

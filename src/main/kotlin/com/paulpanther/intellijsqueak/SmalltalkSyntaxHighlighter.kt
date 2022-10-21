@@ -25,6 +25,12 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
             .createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING)
         val assignment = TextAttributesKey
             .createTextAttributesKey("ASSIGNMENT", DefaultLanguageHighlighterColors.OPERATION_SIGN)
+        val comment = TextAttributesKey
+            .createTextAttributesKey("COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT)
+        val temporaryDefinition = TextAttributesKey
+            .createTextAttributesKey("TEMPORARY_DEFINITION", DefaultLanguageHighlighterColors.REASSIGNED_LOCAL_VARIABLE)
+        val temporaryVariable = TextAttributesKey
+            .createTextAttributesKey("TEMPORARY_VARIABLE", DefaultLanguageHighlighterColors.REASSIGNED_LOCAL_VARIABLE)
     }
 
     override fun getHighlightingLexer() = SmalltalkLexerAdapter()
@@ -44,6 +50,8 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
             SmalltalkTypes.SUPER -> key(keyword)
             SmalltalkTypes.STRING -> key(string)
             SmalltalkTypes.ASSIGNMENT_OPERATOR -> key(assignment)
+            SmalltalkTypes.COMMENT -> key(comment)
+            SmalltalkTypes.TEMPORARIES -> key(temporaryDefinition)
             else -> arrayOf()
         }
     }

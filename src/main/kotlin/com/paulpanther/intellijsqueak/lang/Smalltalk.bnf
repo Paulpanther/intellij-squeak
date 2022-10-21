@@ -16,8 +16,6 @@
 
     extends(".*statement")=statement
       tokens=[
-        LINE_TERMINATOR='regexp:\r|\n|\r\n'
-        WHITE_SPACE='regexp:\s+'
         IDENTIFIER='regexp:[a-zA-Z_]\w*'
         NUMBER='regexp:\d+'
         KEYWORD='regexp:[a-zA-Z_]+:'
@@ -45,7 +43,9 @@ private selector ::= unary_selector
 
 unary_selector ::= named_identifier
 
-temporaries ::= BLOCK_VARIABLE_SEPERATOR named_identifier+ BLOCK_VARIABLE_SEPERATOR
+temporaries ::= BLOCK_VARIABLE_SEPERATOR temporary+ BLOCK_VARIABLE_SEPERATOR
+
+temporary ::= named_identifier
 
 multi_statement ::= statement (STATEMENT_SEPERATOR statement)*
 

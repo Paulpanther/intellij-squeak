@@ -2,12 +2,13 @@ package com.paulpanther.intellijsqueak
 
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
+import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
-import javax.swing.Icon
+import com.intellij.openapi.options.colors.RainbowColorSettingsPage
 
-class SmalltalkColorSettingsPage: ColorSettingsPage {
+class SmalltalkColorSettingsPage: ColorSettingsPage, RainbowColorSettingsPage {
 
     companion object {
         val descriptors = arrayOf(
@@ -25,8 +26,12 @@ class SmalltalkColorSettingsPage: ColorSettingsPage {
     override fun getColorDescriptors(): Array<ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
 
     override fun getDisplayName() = "Smalltalk"
+
     override fun getIcon() = SmalltalkIcons.file
-    override fun getHighlighter() = SmalltalkSyntaxHighlighter()
+
+    override fun getHighlighter(): SyntaxHighlighter =
+        SyntaxHighlighterFactory.getSyntaxHighlighter(SmalltalkLanguage, null, null)
+
     override fun getAttributeDescriptors() = descriptors
 
     override fun getDemoText(): String {
@@ -38,4 +43,9 @@ class SmalltalkColorSettingsPage: ColorSettingsPage {
     }
 
     override fun getAdditionalHighlightingTagToDescriptorMap() = null
+
+    override fun isRainbowType(type: TextAttributesKey?) =
+        type == SmalltalkSyntaxHighlighter.temporaryVariable
+
+    override fun getLanguage() = SmalltalkLanguage
 }

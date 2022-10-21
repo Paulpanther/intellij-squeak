@@ -29,5 +29,10 @@
         <lang.findUsagesProvider
                 language="Smalltalk"
                 implementationClass="com.paulpanther.intellijsqueak.SmalltalkFindUsagesProvider"/>
+        <lang.commenter
+                language="Smalltalk"
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkCommenter"/>
+        <highlightVisitor
+                implementation="com.paulpanther.intellijsqueak.SmalltalkSemanticHighlighter" />
     </extensions>
 </idea-plugin>
