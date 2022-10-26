@@ -18,7 +18,7 @@
       tokens=[
         IDENTIFIER='regexp:[a-zA-Z_]\w*'
         NUMBER='regexp:\d+'
-        KEYWORD='regexp:[a-zA-Z_]+:'
+        BLOCK_ARGUMENT='regexp::[a-zA-Z_]+'
         STRING="regexp:'[^']*'"
         BINARY_OPERATOR="regexp:[*+\\\-/~<>@=,%&?!]+"
         COMMENT='regexp:"[^"]*"'
@@ -74,6 +74,16 @@ variable ::= IDENTIFIER {
 }
 
 statement_body ::= multi_statement? STATEMENT_SEPERATOR?
+
+block ::= BLOCK_START block_arguments? temporaries? statement_body BLOCK_END
+
+block_arguments ::= block_argument+ BLOCK_VARIABLE_SEPERATOR
+
+block_argument ::= IDENTIFIER {
+    mixin="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElementImpl"
+    implements="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElement"
+    methods=[getName setName getNameIdentifier]
+}
 
 named_identifier ::= IDENTIFIER {
     mixin="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElementImpl"

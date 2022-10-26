@@ -33,6 +33,14 @@
                 language="Smalltalk"
                 implementationClass="com.paulpanther.intellijsqueak.SmalltalkCommenter"/>
         <highlightVisitor
-                implementation="com.paulpanther.intellijsqueak.SmalltalkSemanticHighlighter" />
+                implementation="com.paulpanther.intellijsqueak.SmalltalkSemanticHighlighter"/>
+        <lang.foldingBuilder
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkFoldingBuilder"
+                language="Smalltalk"/>
+        <lang.braceMatcher
+                language="Smalltalk"
+                implementationClass="com.paulpanther.intellijsqueak.SmalltalkBraceMatcher"/>
+        <configurationType
+                implementation="com.paulpanther.intellijsqueak.run.SmalltalkRunConfigurationType"/>
     </extensions>
 </idea-plugin>
