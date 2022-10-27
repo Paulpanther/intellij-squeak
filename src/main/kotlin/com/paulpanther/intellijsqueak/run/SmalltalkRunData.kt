@@ -1,6 +1,7 @@
 package com.paulpanther.intellijsqueak.run
 
 import com.google.gson.Gson
+import com.intellij.openapi.project.Project
 import java.io.File
 
 
@@ -29,11 +30,12 @@ data class SmalltalkRunDataEvaluate(
 ): SmalltalkRunDataType("evaluate")
 
 class SmalltalkRunData(
+    private val project: Project,
     private val file: String?,
     private val entryPoint: String?
 ) {
     fun toJson(): String? {
-        val code = File(file ?: return null).readText()
+        val code = File(project.basePath, file ?: return null).readText()
         val data = SmalltalkRunDataRunScript(
             listOf(
                 SmalltalkRunDataActionAddClass("PluginRunner"),

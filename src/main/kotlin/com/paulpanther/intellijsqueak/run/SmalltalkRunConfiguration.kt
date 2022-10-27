@@ -8,8 +8,9 @@ import com.intellij.execution.process.ProcessTerminatedListener
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
+import java.io.File
 
-private const val connector = "/home/paul/pluginTest.py"
+private const val connector = "/home/paul/dev/hobby/SqueakCommClient/run.sh"
 
 class SmalltalkRunConfiguration(
     project: Project,
@@ -25,7 +26,16 @@ class SmalltalkRunConfiguration(
     ): RunProfileState {
         return object: CommandLineState(environment) {
             override fun startProcess(): ProcessHandler {
-                val cmd = GeneralCommandLine(connector, SmalltalkRunData(scriptName, entryPoint).toJson())
+                var cmd = GeneralCommandLine(connector)
+
+                val text = SmalltalkRunData(project, scriptName, entryPoint).toJson()
+
+                if (text != null) {
+                    val file = File.createTempFile("input", "txt")
+                    file.writeText(text)
+                    cmd = cmd.withInput(file)
+                }
+
                 val process = ProcessHandlerFactory.getInstance().createColoredProcessHandler(cmd)
                 ProcessTerminatedListener.attach(process)
                 return process

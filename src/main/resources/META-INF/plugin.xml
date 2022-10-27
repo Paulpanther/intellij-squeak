@@ -42,5 +42,10 @@
                 implementationClass="com.paulpanther.intellijsqueak.SmalltalkBraceMatcher"/>
         <configurationType
                 implementation="com.paulpanther.intellijsqueak.run.SmalltalkRunConfigurationType"/>
+        <toolWindow
+                factoryClass="com.paulpanther.intellijsqueak.fileView.SmalltalkFileSystemToolWindow"
+                id="Squeak Project"
+                icon="com.paulpanther.intellijsqueak.SmalltalkIcons.file"
+                anchor="left" />
     </extensions>
 </idea-plugin>
