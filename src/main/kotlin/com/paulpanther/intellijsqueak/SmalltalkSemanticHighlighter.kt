@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.paulpanther.intellijsqueak.lang.SmalltalkFile
 import com.paulpanther.intellijsqueak.lang.SmalltalkVariable
+import com.paulpanther.intellijsqueak.lang.isArgument
 import com.paulpanther.intellijsqueak.lang.isTemporary
 
 /** TODO isn't called for some reason */
@@ -18,6 +19,8 @@ class SmalltalkSemanticHighlighter: RainbowVisitor() {
         if (element is SmalltalkVariable) {
             if (element.isTemporary()) {
                 highlight(element, SmalltalkSyntaxHighlighter.temporaryVariable)
+            } else if (element.isArgument()) {
+                highlight(element, SmalltalkSyntaxHighlighter.argumentVariable)
             }
         }
     }

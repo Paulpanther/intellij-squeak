@@ -17,8 +17,9 @@
     extends(".*statement")=statement
       tokens=[
         IDENTIFIER='regexp:[a-zA-Z_]\w*'
+        KEYWORD='regexp:[a-zA-Z_]+:'
         NUMBER='regexp:\d+'
-        BLOCK_ARGUMENT='regexp::[a-zA-Z_]+'
+        BLOCK_ARGUMENT_IDENTIFIER='regexp::[a-zA-Z_]+'
         STRING="regexp:'[^']*'"
         BINARY_OPERATOR="regexp:[*+\\\-/~<>@=,%&?!]+"
         COMMENT='regexp:"[^"]*"'
@@ -39,17 +40,21 @@ file ::= method
 
 method ::= selector temporaries? statement_body
 
-private selector ::= unary_selector
+private selector ::= unary_selector | keyword_selector
 
 unary_selector ::= named_identifier
+keyword_selector ::= (KEYWORD argument)+
 
 temporaries ::= BLOCK_VARIABLE_SEPERATOR temporary+ BLOCK_VARIABLE_SEPERATOR
 
 temporary ::= named_identifier
+argument ::= named_identifier
 
 multi_statement ::= statement (STATEMENT_SEPERATOR statement)*
 
-statement ::= expression
+statement ::= expression | return
+
+return ::= RETURN_OPERATOR expression
 
 expression ::= assignment | primary
 
@@ -79,7 +84,7 @@ block ::= BLOCK_START block_arguments? temporaries? statement_body BLOCK_END
 
 block_arguments ::= block_argument+ BLOCK_VARIABLE_SEPERATOR
 
-block_argument ::= IDENTIFIER {
+block_argument ::= BLOCK_ARGUMENT_IDENTIFIER {
     mixin="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElementImpl"
     implements="com.paulpanther.intellijsqueak.lang.SmalltalkNamedElement"
     methods=[getName setName getNameIdentifier]

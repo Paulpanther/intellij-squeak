@@ -9,8 +9,18 @@ object SmalltalkPsiImplUtil {
     fun getName(identifier: SmalltalkNamedIdentifier): String = identifier.text
 
     @JvmStatic
+    fun getName(identifier: SmalltalkBlockArgument): String = identifier.text
+
+    @JvmStatic
     fun setName(identifier: SmalltalkNamedIdentifier, newName: String): PsiElement? {
         val node = identifier.identifier.node as? LeafPsiElement ?: return null
+        node.replaceWithText(newName)
+        return identifier
+    }
+
+    @JvmStatic
+    fun setName(identifier: SmalltalkBlockArgument, newName: String): PsiElement? {
+        val node = identifier.blockArgumentIdentifier.node as? LeafPsiElement ?: return null
         node.replaceWithText(newName)
         return identifier
     }
@@ -21,7 +31,15 @@ object SmalltalkPsiImplUtil {
     }
 
     @JvmStatic
+    fun getNameIdentifier(identifier: SmalltalkBlockArgument): PsiElement? {
+        return identifier.blockArgumentIdentifier
+    }
+
+    @JvmStatic
     fun getReferences(variable: SmalltalkVariable): Array<PsiReferenceBase<PsiElement>> {
-        return arrayOf(SmalltalkTemporaryVariableReference(variable))
+        return arrayOf(
+            SmalltalkTemporaryVariableReference(variable),
+            SmalltalkArgumentVariableReference(variable),
+        )
     }
 }

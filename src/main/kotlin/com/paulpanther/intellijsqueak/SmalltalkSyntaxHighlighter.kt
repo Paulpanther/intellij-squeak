@@ -20,7 +20,7 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
         val parenthesis = TextAttributesKey
             .createTextAttributesKey("PARENTHESIS", DefaultLanguageHighlighterColors.PARENTHESES)
         val keyword = TextAttributesKey
-            .createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
+            .createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
         val string = TextAttributesKey
             .createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING)
         val assignment = TextAttributesKey
@@ -31,6 +31,12 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
             .createTextAttributesKey("TEMPORARY_DEFINITION", DefaultLanguageHighlighterColors.REASSIGNED_LOCAL_VARIABLE)
         val temporaryVariable = TextAttributesKey
             .createTextAttributesKey("TEMPORARY_VARIABLE", DefaultLanguageHighlighterColors.REASSIGNED_LOCAL_VARIABLE)
+        val argumentDefinition = TextAttributesKey
+            .createTextAttributesKey("ARGUMENT_DEFINITION", DefaultLanguageHighlighterColors.PARAMETER)
+        val argumentVariable = TextAttributesKey
+            .createTextAttributesKey("ARGUMENT_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
+        val returnOperator = TextAttributesKey
+            .createTextAttributesKey("RETURN", DefaultLanguageHighlighterColors.KEYWORD)
     }
 
     override fun getHighlightingLexer() = SmalltalkLexerAdapter()
@@ -51,7 +57,10 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
             SmalltalkTypes.STRING -> key(string)
             SmalltalkTypes.ASSIGNMENT_OPERATOR -> key(assignment)
             SmalltalkTypes.COMMENT -> key(comment)
-            SmalltalkTypes.TEMPORARIES -> key(temporaryDefinition)
+            SmalltalkTypes.TEMPORARY -> key(temporaryDefinition)
+            SmalltalkTypes.ARGUMENT -> key(argumentDefinition)
+            SmalltalkTypes.KEYWORD -> key(keyword)
+            SmalltalkTypes.RETURN_OPERATOR -> key(returnOperator)
             else -> arrayOf()
         }
     }
