@@ -6,7 +6,7 @@ import com.paulpanther.intellijsqueak.SmalltalkFileType
 sealed class SmalltalkVirtualFile(
     private val mySystem: SmalltalkVirtualFileSystem,
     private val myParent: SmalltalkVirtualFile?,
-    private val myName: String
+    protected var myName: String
 ): VirtualFile() {
     override fun getFileSystem() = mySystem
 
@@ -36,13 +36,5 @@ sealed class SmalltalkVirtualFile(
     override fun getTimeStamp(): Long {
         // TODO
         return 0L
-    }
-
-    override fun refresh(
-        asynchronous: Boolean,
-        recursive: Boolean,
-        postRunnable: Runnable?
-    ) {
-        TODO("Not yet implemented")
     }
 }

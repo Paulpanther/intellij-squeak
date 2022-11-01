@@ -3,22 +3,15 @@ package com.paulpanther.intellijsqueak.fileView
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileListener
 import com.intellij.openapi.vfs.VirtualFileSystem
+import com.paulpanther.intellijsqueak.wsClient.SqueakClient
 
-class SmalltalkVirtualFileSystem: VirtualFileSystem() {
+class SmalltalkVirtualFileSystem(private val squeak: SqueakClient): VirtualFileSystem() {
     private val listeners = mutableListOf<VirtualFileListener>()
-    private val root = SmalltalkVirtualFileRoot(this)
-    val methodFile: SmalltalkVirtualFileMethod
+    var root = SmalltalkVirtualFileRoot(this)
+    private val changeListeners = mutableListOf<() -> Unit>()
 
     init {
-        val packageFile = SmalltalkVirtualFilePackage(this, root, "aPackage")
-        val classFile = SmalltalkVirtualFileClass(this, packageFile, "aClass")
-        val categoryFile = SmalltalkVirtualFileCategory(this, classFile, "aCategory")
-        methodFile = SmalltalkVirtualFileMethod(this, categoryFile, "aMethod")
-
-        categoryFile.myChildren += methodFile
-        classFile.myChildren += categoryFile
-        packageFile.myChildren += classFile
-        root.myChildren += packageFile
+        refresh(true)
     }
 
     override fun getProtocol() = "squeak"
@@ -28,7 +21,13 @@ class SmalltalkVirtualFileSystem: VirtualFileSystem() {
     }
 
     override fun refresh(asynchronous: Boolean) {
-        // TODO
+        squeak.refreshFileSystem(this) {
+            changeListeners.forEach { it() }
+        }
+    }
+
+    fun onChange(listener: () -> Unit) {
+        changeListeners += listener
     }
 
     override fun refreshAndFindFileByPath(path: String): VirtualFile? {

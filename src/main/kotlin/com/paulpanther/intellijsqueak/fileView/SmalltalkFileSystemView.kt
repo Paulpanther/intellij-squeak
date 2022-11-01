@@ -12,10 +12,14 @@ import com.intellij.ui.tree.AsyncTreeModel
 import com.intellij.ui.tree.StructureTreeModel
 import com.intellij.util.EditSourceOnDoubleClickHandler
 import com.intellij.util.ui.components.BorderLayoutPanel
+import com.paulpanther.intellijsqueak.wsClient.SqueakClient
 
 class SmalltalkFileSystemView(project: Project)
     : BorderLayoutPanel(), DumbAware, Disposable, DataProvider {
-    private val structure = SmalltalkFileSystemStructure(project)
+    private val squeak = SqueakClient(this).apply { run() }
+    private val fileSystem = SmalltalkVirtualFileSystem(squeak)
+
+    private val structure = SmalltalkFileSystemStructure(fileSystem, project)
     private val model = StructureTreeModel(structure, FolderNodeComparator(project), this)
     val tree = DnDAwareTree(AsyncTreeModel(model, this))
 
@@ -31,10 +35,15 @@ class SmalltalkFileSystemView(project: Project)
 //            .install()
 //        tree.emptyText.initialize(tree)
         EditSourceOnDoubleClickHandler.install(tree)
+
+        fileSystem.onChange {
+            repaint()
+            model.invalidate()
+        }
     }
 
     override fun dispose() {
-        TODO("Not yet implemented")
+
     }
 
     override fun getData(dataId: String) = when {

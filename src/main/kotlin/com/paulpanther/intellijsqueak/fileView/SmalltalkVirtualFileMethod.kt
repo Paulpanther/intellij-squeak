@@ -1,5 +1,6 @@
 package com.paulpanther.intellijsqueak.fileView
 
+import com.intellij.util.application
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -31,6 +32,19 @@ class SmalltalkVirtualFileMethod (
 
     override fun getLength(): Long {
         return contentsToByteArray().size.toLong()
+    }
+
+    override fun refresh(
+        asynchronous: Boolean,
+        recursive: Boolean,
+        postRunnable: Runnable?
+    ) {
+        Thread {
+            application.invokeLater {
+                myName = "Another-Name"
+                postRunnable?.run()
+            }
+        }.start()
     }
 
     override fun getModificationStamp(): Long {
