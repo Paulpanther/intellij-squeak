@@ -5,7 +5,10 @@ import com.intellij.openapi.vfs.VirtualFileListener
 import com.intellij.openapi.vfs.VirtualFileSystem
 import com.paulpanther.intellijsqueak.wsClient.SqueakClient
 
-class SmalltalkVirtualFileSystem(private val squeak: SqueakClient): VirtualFileSystem() {
+class SmalltalkVirtualFileSystem(
+    val squeak: SqueakClient
+): VirtualFileSystem() {
+
     private val listeners = mutableListOf<VirtualFileListener>()
     var root = SmalltalkVirtualFileRoot(this)
     private val changeListeners = mutableListOf<() -> Unit>()
@@ -28,6 +31,13 @@ class SmalltalkVirtualFileSystem(private val squeak: SqueakClient): VirtualFileS
 
     fun onChange(listener: () -> Unit) {
         changeListeners += listener
+    }
+
+    fun methods(): List<SmalltalkVirtualFileMethod> {
+        return root.packages
+            .flatMap { it.classes }
+            .flatMap { it.categories }
+            .flatMap { it.methods }
     }
 
     override fun refreshAndFindFileByPath(path: String): VirtualFile? {

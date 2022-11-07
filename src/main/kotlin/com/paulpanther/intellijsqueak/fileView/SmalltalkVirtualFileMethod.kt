@@ -1,14 +1,22 @@
 package com.paulpanther.intellijsqueak.fileView
 
-import com.intellij.util.application
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import java.io.InputStream
 import java.io.OutputStream
 
 class SmalltalkVirtualFileMethod (
     system: SmalltalkVirtualFileSystem,
-    parent: SmalltalkVirtualFileCategory,
+    val category: SmalltalkVirtualFileCategory,
     name: String
-): SmalltalkVirtualFile(system, parent, name) {
+): SmalltalkVirtualFile(system, category, name) {
+    private val originalContent by lazy {
+        squeak.fileContent(clazz.name, name)
+    }
+    private var modifiedContent: String? = null
+    private val content get() = modifiedContent ?: originalContent
+
+    val clazz get() = category.clazz
+
     override fun findFile(path: String): SmalltalkVirtualFile? {
         if (path == "") return this
         return null
@@ -23,11 +31,18 @@ class SmalltalkVirtualFileMethod (
         newModificationStamp: Long,
         newTimeStamp: Long
     ): OutputStream {
+        val manager = requestor as? FileDocumentManager ?: return OutputStream.nullOutputStream()
+        val doc = manager.getDocument(this)
+        if (doc != null && manager.isDocumentUnsaved(doc)) {
+            val content = doc.text
+            squeak.writeFile(clazz.name, name, content)
+            modifiedContent = content
+        }
         return OutputStream.nullOutputStream()
     }
 
     override fun contentsToByteArray(): ByteArray {
-        return "Hello".toByteArray()
+        return content.toByteArray()
     }
 
     override fun getLength(): Long {
@@ -39,12 +54,6 @@ class SmalltalkVirtualFileMethod (
         recursive: Boolean,
         postRunnable: Runnable?
     ) {
-        Thread {
-            application.invokeLater {
-                myName = "Another-Name"
-                postRunnable?.run()
-            }
-        }.start()
     }
 
     override fun getModificationStamp(): Long {
@@ -52,6 +61,6 @@ class SmalltalkVirtualFileMethod (
     }
 
     override fun getInputStream(): InputStream {
-        return "Hello".byteInputStream()
+        return content.byteInputStream()
     }
 }

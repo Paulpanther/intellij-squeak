@@ -15,7 +15,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class WebSocketClient {
     private val outgoingQueue = LinkedBlockingQueue<String>()
-    private var listener: (msg: String) -> Unit = {}
+    private val incomingQueue = LinkedBlockingQueue<String>()
+
+    private var listeners = mutableListOf<(msg: String) -> Unit>()
+
     private val running = AtomicBoolean(true)
 
     private val client = HttpClient(CIO) {
@@ -49,9 +52,7 @@ class WebSocketClient {
                                 msg.getOrNull() as? Frame.Text ?: continue
                             val text = frame.readText()
 
-                            application.invokeLater {
-                                listener(text)
-                            }
+                            listeners.forEach { it(text) }
                         }
                     }
                 }
@@ -67,7 +68,23 @@ class WebSocketClient {
         outgoingQueue += msg
     }
 
-    fun onReceive(listener: (msg: String) -> Unit) {
-        this.listener = listener
+    fun addAsyncListener(listener: (msg: String) -> Unit) {
+        this.listeners += {
+            application.invokeLater {
+                listener(it)
+            }
+        }
+    }
+
+    fun addSyncListener(): String {
+        val l = { msg: String ->
+            incomingQueue += msg
+        }
+        this.listeners += l
+
+        while (incomingQueue.isEmpty()) continue
+
+        this.listeners -= l
+        return incomingQueue.remove()
     }
 }

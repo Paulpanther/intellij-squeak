@@ -47,6 +47,10 @@ class SmalltalkFileSystemNode(
 
     override fun isAlwaysLeaf() =
         file is SmalltalkVirtualFileMethod
+
+    fun toOpenFileDescriptor(): OpenFileDescriptor {
+        return OpenFileDescriptor(project, virtualFile)
+    }
 }
 
 /**
@@ -59,15 +63,6 @@ class SmalltalkFileSystemStructure(
 
     override fun getRootElement(): Any {
         return SmalltalkFileSystemNode(project, system.root, null)
-    }
-
-    fun navigateableArray(): Array<OpenFileDescriptor> {
-        return arrayOf(
-            OpenFileDescriptor(
-                project,
-                (rootElement as SmalltalkFileSystemNode).file
-            )
-        )
     }
 
     override fun getChildElements(element: Any): Array<Any> {
@@ -85,6 +80,15 @@ class SmalltalkFileSystemStructure(
         parentDescriptor: NodeDescriptor<*>?
     ): NodeDescriptor<*> {
         return element as NodeDescriptor<*>
+    }
+
+    fun allNavigatables(): Array<OpenFileDescriptor> {
+        return arrayOf(
+            OpenFileDescriptor(
+                project,
+                (rootElement as SmalltalkFileSystemNode).file
+            )
+        )
     }
 
     override fun commit() = Unit

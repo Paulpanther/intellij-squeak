@@ -3,11 +3,11 @@ package com.paulpanther.intellijsqueak.fileView
 import java.io.InputStream
 import java.io.OutputStream
 
-abstract class SmalltalkVirtualFileDirectory(
+abstract class SmalltalkVirtualFileDirectory<T: SmalltalkVirtualFile>(
     mySystem: SmalltalkVirtualFileSystem,
     parent: SmalltalkVirtualFile?,
     name: String,
-    var myChildren: MutableList<SmalltalkVirtualFile> = mutableListOf()
+    var myChildren: MutableList<T> = mutableListOf()
 ): SmalltalkVirtualFile(mySystem, parent, name) {
     override fun findFile(path: String): SmalltalkVirtualFile? {
         val childName = path.split(".").firstOrNull() ?: return null
@@ -16,9 +16,9 @@ abstract class SmalltalkVirtualFileDirectory(
 
     override fun isDirectory() = true
 
-    override fun getChildren() = myChildren.toTypedArray()
+    override fun getChildren() = myChildren.toTypedArray<SmalltalkVirtualFile>()
 
-    fun setChildren(children: List<SmalltalkVirtualFile>) {
+    fun setChildren(children: List<T>) {
         myChildren = children.toMutableList()
     }
 

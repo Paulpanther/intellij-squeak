@@ -4,4 +4,6 @@ class SmalltalkVirtualFilePackage(
     system: SmalltalkVirtualFileSystem,
     parent: SmalltalkVirtualFileRoot,
     name: String
-): SmalltalkVirtualFileDirectory(system, parent, name)
+): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileClass>(system, parent, name) {
+    val classes get() = myChildren.toList()
+}

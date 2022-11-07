@@ -2,6 +2,8 @@ package com.paulpanther.intellijsqueak.fileView
 
 class SmalltalkVirtualFileCategory(
     system: SmalltalkVirtualFileSystem,
-    parent: SmalltalkVirtualFileClass,
+    val clazz: SmalltalkVirtualFileClass,
     name: String,
-): SmalltalkVirtualFileDirectory(system, parent, name)
+): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileMethod>(system, clazz, name) {
+    val methods get() = myChildren.toList()
+}
