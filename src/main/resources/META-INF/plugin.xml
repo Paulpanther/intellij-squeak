@@ -8,53 +8,53 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType
                 name="Smalltalk File"
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkFileType"
+                implementationClass="com.paulpanther.intellijsqueak.lang.definition.SmalltalkFileType"
                 language="Smalltalk"
                 extensions="st"/>
         <moduleBuilder
-                builderClass="com.paulpanther.intellijsqueak.SmalltalkModuleBuilder"
+                builderClass="com.paulpanther.intellijsqueak.ui.module.SmalltalkModuleBuilder"
                 id="SMALLTALK_MODULE_BUILDER"/>
         <newProjectWizard.language
-                implementation="com.paulpanther.intellijsqueak.SmalltalkNewProjectWizard"/>
+                implementation="com.paulpanther.intellijsqueak.ui.newProjectWizard.SmalltalkNewProjectWizard"/>
         <lang.parserDefinition
-                implementationClass="com.paulpanther.intellijsqueak.lang.SmalltalkParserDefinition"
+                implementationClass="com.paulpanther.intellijsqueak.lang.definition.SmalltalkParserDefinition"
                 language="Smalltalk"/>
         <lang.syntaxHighlighterFactory
                 language="Smalltalk"
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkSyntaxHighlighterFactory"/>
+                implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkSyntaxHighlighterFactory"/>
         <colorSettingsPage
-                implementation="com.paulpanther.intellijsqueak.SmalltalkColorSettingsPage"/>
+                implementation="com.paulpanther.intellijsqueak.settings.SmalltalkColorSettingsPage"/>
         <lang.refactoringSupport
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkRefactoringSupportProvider"/>
+                implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkRefactoringSupportProvider"/>
         <lang.findUsagesProvider
                 language="Smalltalk"
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkFindUsagesProvider"/>
+                implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkFindUsagesProvider"/>
         <lang.commenter
                 language="Smalltalk"
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkCommenter"/>
+                implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkCommenter"/>
         <highlightVisitor
-                implementation="com.paulpanther.intellijsqueak.SmalltalkSemanticHighlighter"/>
+                implementation="com.paulpanther.intellijsqueak.editor.SmalltalkSemanticHighlighter"/>
         <lang.foldingBuilder
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkFoldingBuilder"
+                implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkFoldingBuilder"
                 language="Smalltalk"/>
         <lang.braceMatcher
                 language="Smalltalk"
-                implementationClass="com.paulpanther.intellijsqueak.SmalltalkBraceMatcher"/>
+                implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkBraceMatcher"/>
         <configurationType
-                implementation="com.paulpanther.intellijsqueak.run.SmalltalkRunConfigurationType"/>
+                implementation="com.paulpanther.intellijsqueak.runConfiguration.SmalltalkRunConfigurationType"/>
         <toolWindow
-                factoryClass="com.paulpanther.intellijsqueak.fileView.SmalltalkProjectToolWindow"
+                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectToolWindow"
                 id="Squeak Project"
-                icon="com.paulpanther.intellijsqueak.SmalltalkIcons.smalltalk"
+                icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"
                 anchor="left" />
         <toolWindow
-                factoryClass="com.paulpanther.intellijsqueak.fileView.SmalltalkFileSystemToolWindow"
+                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemToolWindow"
                 id="Squeak Image"
-                icon="com.paulpanther.intellijsqueak.SmalltalkIcons.smalltalk"
+                icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"
                 anchor="left"
                 order="last"/>
         <projectService
-                serviceImplementation="com.paulpanther.intellijsqueak.fileView.SmalltalkProjectService" />
+                serviceImplementation="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectService" />
         <statusBarWidgetFactory
                 implementation="com.paulpanther.intellijsqueak.SqueakStatusBarWidgetFactory" />
     </extensions>

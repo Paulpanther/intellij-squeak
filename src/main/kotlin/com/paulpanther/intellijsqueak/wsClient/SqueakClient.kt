@@ -3,7 +3,7 @@ package com.paulpanther.intellijsqueak.wsClient
 import com.google.gson.Gson
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
-import com.paulpanther.intellijsqueak.fileView.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
 
 private abstract class SqueakAction(val type: String)
 

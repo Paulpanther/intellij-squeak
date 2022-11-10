@@ -1,6 +1,6 @@
 package com.paulpanther.intellijsqueak.wsClient
 
-import com.paulpanther.intellijsqueak.fileView.*
+import com.paulpanther.intellijsqueak.vfs.*
 
 fun SqueakRefreshFileSystemResult.toVirtualFileRoot(
     system: SmalltalkVirtualFileSystem
