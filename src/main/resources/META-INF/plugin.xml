@@ -43,9 +43,19 @@
         <configurationType
                 implementation="com.paulpanther.intellijsqueak.run.SmalltalkRunConfigurationType"/>
         <toolWindow
-                factoryClass="com.paulpanther.intellijsqueak.fileView.SmalltalkFileSystemToolWindow"
+                factoryClass="com.paulpanther.intellijsqueak.fileView.SmalltalkProjectToolWindow"
                 id="Squeak Project"
-                icon="com.paulpanther.intellijsqueak.SmalltalkIcons.file"
+                icon="com.paulpanther.intellijsqueak.SmalltalkIcons.smalltalk"
                 anchor="left" />
+        <toolWindow
+                factoryClass="com.paulpanther.intellijsqueak.fileView.SmalltalkFileSystemToolWindow"
+                id="Squeak Image"
+                icon="com.paulpanther.intellijsqueak.SmalltalkIcons.smalltalk"
+                anchor="left"
+                order="last"/>
+        <projectService
+                serviceImplementation="com.paulpanther.intellijsqueak.fileView.SmalltalkProjectService" />
+        <statusBarWidgetFactory
+                implementation="com.paulpanther.intellijsqueak.SqueakStatusBarWidgetFactory" />
     </extensions>
 </idea-plugin>

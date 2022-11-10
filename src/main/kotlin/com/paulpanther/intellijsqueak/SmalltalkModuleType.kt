@@ -6,5 +6,5 @@ object SmalltalkModuleType: ModuleType<SmalltalkModuleBuilder>("SMALLTALK_MODULE
     override fun createModuleBuilder() = SmalltalkModuleBuilder()
     override fun getName() = "Smalltalk"
     override fun getDescription() = "Smalltalk module"
-    override fun getNodeIcon(isOpened: Boolean) = SmalltalkIcons.file
+    override fun getNodeIcon(isOpened: Boolean) = SmalltalkIcons.smalltalk
 }

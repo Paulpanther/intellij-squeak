@@ -27,7 +27,7 @@ class SmalltalkColorSettingsPage: ColorSettingsPage, RainbowColorSettingsPage {
 
     override fun getDisplayName() = "Smalltalk"
 
-    override fun getIcon() = SmalltalkIcons.file
+    override fun getIcon() = SmalltalkIcons.smalltalk
 
     override fun getHighlighter(): SyntaxHighlighter =
         SyntaxHighlighterFactory.getSyntaxHighlighter(SmalltalkLanguage, null, null)

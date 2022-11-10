@@ -14,7 +14,7 @@ class SmalltalkRunConfigurationType: ConfigurationType {
     override fun getConfigurationTypeDescription() =
         "Smalltalk run configuration type"
 
-    override fun getIcon() = SmalltalkIcons.file
+    override fun getIcon() = SmalltalkIcons.smalltalk
 
     override fun getId() = SmalltalkRunConfigurationType.id
 

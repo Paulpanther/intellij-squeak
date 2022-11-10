@@ -3,5 +3,6 @@ package com.paulpanther.intellijsqueak
 import com.intellij.openapi.util.IconLoader
 
 object SmalltalkIcons {
-    val file = IconLoader.getIcon("/icons/smalltalk.png", SmalltalkIcons::class.java)
+    val smalltalk = IconLoader.getIcon("/icons/smalltalk.svg", SmalltalkIcons::class.java)
+    val squeak = IconLoader.getIcon("/icons/squeak.png", SmalltalkIcons::class.java)
 }

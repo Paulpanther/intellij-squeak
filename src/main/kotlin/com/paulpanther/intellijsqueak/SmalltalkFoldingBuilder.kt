@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiElement
-import com.paulpanther.intellijsqueak.lang.SmalltalkBlock
+import com.paulpanther.intellijsqueak.lang.SmalltalkBlockExpr
 
 class SmalltalkFoldingBuilder: FoldingBuilderEx(), DumbAware {
     override fun buildFoldRegions(
@@ -16,7 +16,7 @@ class SmalltalkFoldingBuilder: FoldingBuilderEx(), DumbAware {
         quick: Boolean
     ): Array<FoldingDescriptor> {
         val group = FoldingGroup.newGroup("block")
-        val literals = root.findChildrenOfType<SmalltalkBlock>()
+        val literals = root.findChildrenOfType<SmalltalkBlockExpr>()
         return literals
             .filter { it.statementBody.children.isNotEmpty() }
             .map { FoldingDescriptor(it.node, it.textRange.shrink(1), group) }

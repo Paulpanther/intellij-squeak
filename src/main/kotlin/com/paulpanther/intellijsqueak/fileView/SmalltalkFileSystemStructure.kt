@@ -4,25 +4,22 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.util.treeView.AbstractTreeNode
 import com.intellij.ide.util.treeView.AbstractTreeStructure
 import com.intellij.ide.util.treeView.NodeDescriptor
-import com.intellij.navigation.NavigationRequest
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.SimpleTextAttributes
-import com.intellij.ui.tree.LeafState
 import com.paulpanther.intellijsqueak.SmalltalkIcons
-import com.paulpanther.intellijsqueak.wsClient.SqueakClient
 
 
 class SmalltalkFileSystemNode(
     project: Project,
     val file: SmalltalkVirtualFile,
-    val parent: SmalltalkFileSystemNode?
+    val parent: SmalltalkFileSystemNode?,
+    private val structure: SmalltalkFileSystemStructure
 ) : AbstractTreeNode<String>(project, file.name) {
 
     override fun update(presentation: PresentationData) {
         presentation.presentableText = file.name
-        presentation.setIcon(SmalltalkIcons.file)
+        presentation.setIcon(SmalltalkIcons.smalltalk)
         presentation.addText(
             "${presentation.presentableText}  ",
             SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
@@ -30,15 +27,19 @@ class SmalltalkFileSystemNode(
     }
 
     override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
-        return file.children
+        val children = if (structure.useFilter && file is SmalltalkVirtualFilePackage) {
+            file.children.filter { it.name in structure.packageFilter }
+        } else {
+            file.children.toList()
+        }
+
+        return children
             .map {
-                SmalltalkFileSystemNode(project, it as SmalltalkVirtualFile, this)
+                SmalltalkFileSystemNode(project, it as SmalltalkVirtualFile, this, structure)
             }.toMutableList()
     }
 
-    override fun getVirtualFile(): VirtualFile {
-        return file
-    }
+    override fun getVirtualFile() = file
 
     override fun canNavigate() = true
 
@@ -48,21 +49,19 @@ class SmalltalkFileSystemNode(
     override fun isAlwaysLeaf() =
         file is SmalltalkVirtualFileMethod
 
-    fun toOpenFileDescriptor(): OpenFileDescriptor {
-        return OpenFileDescriptor(project, virtualFile)
-    }
+    fun toOpenFileDescriptor() =
+        OpenFileDescriptor(project, virtualFile)
 }
 
-/**
- * TODO OpenFileAction.openFile
- */
 class SmalltalkFileSystemStructure(
     private val system: SmalltalkVirtualFileSystem,
     private val project: Project,
+    val packageFilter: List<String> = listOf(),
+    val useFilter: Boolean = false
 ): AbstractTreeStructure() {
 
     override fun getRootElement(): Any {
-        return SmalltalkFileSystemNode(project, system.root, null)
+        return SmalltalkFileSystemNode(project, system.root, null, this)
     }
 
     override fun getChildElements(element: Any): Array<Any> {
