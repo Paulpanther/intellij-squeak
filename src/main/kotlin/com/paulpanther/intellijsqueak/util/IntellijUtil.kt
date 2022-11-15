@@ -2,20 +2,26 @@ package com.paulpanther.intellijsqueak.util
 
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.progress.Task
+import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
+import com.intellij.util.application
 
-fun runProgress(
+fun <T> runInThread(
     title: String,
     canBeCancelled: Boolean,
+    callback: (result: T) -> Unit,
     project: Project? = null,
-    task: ProgressIndicator.() -> Unit
+    task: (indicator: ProgressIndicator) -> T
 ) {
-    ProgressManager.getInstance().run(
-        object: Task.Modal(project, title, canBeCancelled) {
-            override fun run(indicator: ProgressIndicator) {
-                task(indicator)
-            }
-        }
-    )
+    Thread {
+        val indicator = BackgroundableProcessIndicator(project, title, null, "", canBeCancelled)
+        ProgressManager.getInstance()
+            .runProcess({
+                val result = task(indicator)
+
+                application.invokeLater {
+                    callback(result)
+                }
+            }, indicator)
+    }.start()
 }
