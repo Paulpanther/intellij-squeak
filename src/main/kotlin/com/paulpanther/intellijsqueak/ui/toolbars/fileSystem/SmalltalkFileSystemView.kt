@@ -18,16 +18,14 @@ import com.intellij.util.EditSourceOnEnterKeyHandler
 import com.intellij.util.ui.components.BorderLayoutPanel
 import com.intellij.util.ui.tree.TreeUtil
 import com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectContextMenu
-import com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectService
+import com.paulpanther.intellijsqueak.services.SmalltalkProjectService
 import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
-import com.paulpanther.intellijsqueak.wsClient.SqueakClient
 
 class SmalltalkFileSystemView(
     project: Project,
     private val useFilter: Boolean = false
 ): BorderLayoutPanel(), DumbAware, Disposable, DataProvider {
-    private val squeak = SqueakClient(this).apply { run() }
-    private val fileSystem = SmalltalkVirtualFileSystem(squeak)
+    private val fileSystem = SmalltalkVirtualFileSystem()
 
     private val projectPackages by project.service<SmalltalkProjectService>().state::projectPackages
 

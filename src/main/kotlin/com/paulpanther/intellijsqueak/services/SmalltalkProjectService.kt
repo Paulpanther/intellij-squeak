@@ -1,4 +1,4 @@
-package com.paulpanther.intellijsqueak.ui.toolbars.project
+package com.paulpanther.intellijsqueak.services
 
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service

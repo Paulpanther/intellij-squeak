@@ -1,6 +1,7 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.intellij.openapi.fileEditor.FileDocumentManager
+import com.paulpanther.intellijsqueak.services.squeak
 import java.io.InputStream
 import java.io.OutputStream
 

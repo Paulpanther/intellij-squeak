@@ -1,8 +1,9 @@
-package com.paulpanther.intellijsqueak.runConfiguration;
+package com.paulpanther.intellijsqueak.ui.runConfiguration;
 
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.ui.LabeledComponent
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.paulpanther.intellijsqueak.runConfiguration.SmalltalkRunConfiguration
 import javax.swing.JPanel
 
 

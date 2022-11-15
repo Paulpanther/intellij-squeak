@@ -46,16 +46,29 @@
                 factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectToolWindow"
                 id="Squeak Project"
                 icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"
-                anchor="left" />
+                anchor="left"/>
         <toolWindow
                 factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemToolWindow"
                 id="Squeak Image"
                 icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"
                 anchor="left"
-                order="last"/>
+                secondary="true"/>
         <projectService
-                serviceImplementation="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectService" />
+                serviceImplementation="com.paulpanther.intellijsqueak.services.SmalltalkProjectService"/>
+        <applicationService
+                serviceImplementation="com.paulpanther.intellijsqueak.services.SqueakClientService"/>
         <statusBarWidgetFactory
-                implementation="com.paulpanther.intellijsqueak.SqueakStatusBarWidgetFactory" />
+                implementation="com.paulpanther.intellijsqueak.SqueakWidgetFactory"/>
+        <toolWindow
+                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.transcript.TranscriptFactory"
+                id="Transcript"
+                anchor="bottom"/>
+        <notificationGroup
+                displayType="BALLOON"
+                id="Squeak Notification Group"/>
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
+            displayName="Squeak/ Smalltalk" />
     </extensions>
 </idea-plugin>

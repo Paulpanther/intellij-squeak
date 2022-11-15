@@ -8,6 +8,7 @@ import com.intellij.execution.process.ProcessTerminatedListener
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
+import com.paulpanther.intellijsqueak.ui.runConfiguration.SmalltalkRunConfigurationSettingsEditor
 import java.io.File
 
 private const val connector = "/home/paul/dev/hobby/SqueakCommClient/run.sh"

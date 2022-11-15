@@ -2,8 +2,15 @@ package com.paulpanther.intellijsqueak.wsClient
 
 import com.google.gson.Gson
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.progress.Task
+import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.util.Disposer
+import com.paulpanther.intellijsqueak.util.runProgress
 import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private abstract class SqueakAction(val type: String)
 
@@ -29,15 +36,36 @@ data class SqueakFileContentResult(
     val result: String,
     val type: String)
 
+private data class SqueakResponse(
+    val type: String,
+    val content: String)
+
 class SqueakClient(parent: Disposable): Disposable {
     private val socket = WebSocketClient()
 
     init {
-        Disposer.register(this, parent)
+        Disposer.register(parent, this)
     }
+
+    val connected by socket::connected
 
     fun run() {
         socket.run()
+    }
+
+    fun tryRun(callback: (success: Boolean) -> Unit) {
+        runProgress("Connecting to Squeak")
+
+//            socket.run()
+//
+//            while (indicator.isRunning) {
+//                Thread.sleep(500)
+//                if (socket.connected) {
+//                    callback(true)
+//                    break
+//                }
+//            }
+//        }, indicator)
     }
 
     fun fileContent(clazz: String, file: String): String {
@@ -50,25 +78,39 @@ class SqueakClient(parent: Disposable): Disposable {
     }
 
     fun refreshFileSystem(system: SmalltalkVirtualFileSystem, onResult: () -> Unit) {
-        send(SqueakRefreshFileSystemAction()) { result: SqueakRefreshFileSystemResult ->
-            system.root = result.toVirtualFileRoot(system)
-            onResult()
-        }
+//        send(SqueakRefreshFileSystemAction()) { result: SqueakRefreshFileSystemResult ->
+//            system.root = result.toVirtualFileRoot(system)
+//            onResult()
+//        }
     }
 
-    private inline fun <reified T> send(msg: Any, crossinline onReceive: (response: T) -> Unit) {
-        send(msg)
-
-        socket.addAsyncListener {
-            val result = Gson().fromJson(it, T::class.java)
-            onReceive(result)
-        }
+    fun onTranscriptChange(listener: (msg: String) -> Unit) {
+//        socket.addAsyncListener {
+//        }
     }
+
+//    private inline fun <reified T> send(msg: Any, crossinline callback: (response: SqueakResponse) -> Unit) {
+//        send(msg)
+//
+//        addAsyncListener(true, callback)
+//    }
 
     private inline fun <reified T> sendBlocking(msg: Any): T {
         send(msg)
-        val msg = socket.addSyncListener()
+        val msg = addSyncListener()
         return Gson().fromJson(msg, T::class.java)
+    }
+
+    private fun addAsyncListener(onlyOnce: Boolean, callback: (msg: SqueakResponse) -> Boolean) {
+        socket.addAsyncListener(onlyOnce) {
+            val result = Gson().fromJson(it, SqueakResponse::class.java)
+            callback(result)
+        }
+    }
+
+    private fun addSyncListener(): String {
+        socket.addSyncListener { false }
+        return ""
     }
 
     fun send(msg: Any) {

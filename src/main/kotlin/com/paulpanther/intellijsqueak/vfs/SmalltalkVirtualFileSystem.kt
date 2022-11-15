@@ -3,12 +3,9 @@ package com.paulpanther.intellijsqueak.vfs
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileListener
 import com.intellij.openapi.vfs.VirtualFileSystem
-import com.paulpanther.intellijsqueak.wsClient.SqueakClient
+import com.paulpanther.intellijsqueak.services.squeak
 
-class SmalltalkVirtualFileSystem(
-    val squeak: SqueakClient
-): VirtualFileSystem() {
-
+class SmalltalkVirtualFileSystem: VirtualFileSystem() {
     private val listeners = mutableListOf<VirtualFileListener>()
     var root = SmalltalkVirtualFileRoot(this)
     private val changeListeners = mutableListOf<() -> Unit>()

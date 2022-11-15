@@ -8,8 +8,6 @@ sealed class SmalltalkVirtualFile(
     private val myParent: SmalltalkVirtualFile?,
     protected var myName: String
 ): VirtualFile() {
-    val squeak get () = mySystem.squeak
-
     override fun getFileSystem() = mySystem
 
     override fun getFileType() = SmalltalkFileType()
