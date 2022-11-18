@@ -58,7 +58,7 @@
         <applicationService
                 serviceImplementation="com.paulpanther.intellijsqueak.services.SqueakClientService"/>
         <statusBarWidgetFactory
-                implementation="com.paulpanther.intellijsqueak.SqueakWidgetFactory"/>
+                implementation="com.paulpanther.intellijsqueak.ui.widgets.SqueakWidgetFactory"/>
         <toolWindow
                 factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.transcript.TranscriptFactory"
                 id="Transcript"

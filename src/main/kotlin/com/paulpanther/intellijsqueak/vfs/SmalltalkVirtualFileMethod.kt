@@ -10,9 +10,15 @@ class SmalltalkVirtualFileMethod (
     val category: SmalltalkVirtualFileCategory,
     name: String
 ): SmalltalkVirtualFile(system, category, name) {
-    private val originalContent by lazy {
-        squeak.fileContent(clazz.name, name)
-    }
+    private var _originalContentOrNull: String? = null
+    private val originalContent: String? get() =
+        if (_originalContentOrNull != null) {
+            _originalContentOrNull
+        } else {
+            _originalContentOrNull = squeak.fileContent(clazz.name, name)
+            _originalContentOrNull
+        }
+
     private var modifiedContent: String? = null
     private val content get() = modifiedContent ?: originalContent
 
@@ -36,14 +42,14 @@ class SmalltalkVirtualFileMethod (
         val doc = manager.getDocument(this)
         if (doc != null && manager.isDocumentUnsaved(doc)) {
             val content = doc.text
-            squeak.writeFile(clazz.name, name, content)
+            if (squeak.open) squeak.writeFile(clazz.name, name, content)
             modifiedContent = content
         }
         return OutputStream.nullOutputStream()
     }
 
     override fun contentsToByteArray(): ByteArray {
-        return content.toByteArray()
+        return content?.toByteArray() ?: "".toByteArray()
     }
 
     override fun getLength(): Long {
@@ -62,6 +68,6 @@ class SmalltalkVirtualFileMethod (
     }
 
     override fun getInputStream(): InputStream {
-        return content.byteInputStream()
+        return content?.byteInputStream() ?: "".byteInputStream()
     }
 }

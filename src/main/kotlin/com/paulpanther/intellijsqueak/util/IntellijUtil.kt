@@ -6,7 +6,10 @@ import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.util.application
 
-fun <T> runInThread(
+/**
+ * Starts a new Thread and displays the progress in the UI
+ */
+fun <T> runThread(
     title: String,
     canBeCancelled: Boolean,
     callback: (result: T) -> Unit,

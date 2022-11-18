@@ -6,22 +6,25 @@ import java.lang.Exception
 import java.net.URI
 
 class WSClient(
-    private val onReceive: (msg: String) -> Unit,
-    private val onClose: () -> Unit
-): WebSocketClient(URI("localhost:2424")) {
+    private val messageCallback: (msg: String) -> Unit,
+    private val openCallback: () -> Unit,
+    private val closeCallback: () -> Unit
+): WebSocketClient(URI("ws://localhost:2424")) {
 
-    override fun onOpen(handshake: ServerHandshake?) {}
+    override fun onOpen(handshake: ServerHandshake?) {
+        openCallback()
+    }
 
     override fun onMessage(message: String?) {
         if (message == null) return
-        onReceive(message)
+        messageCallback(message)
     }
 
     override fun onClose(code: Int, reason: String?, remote: Boolean) {
-        onClose()
+        closeCallback()
     }
 
     override fun onError(ex: Exception?) {
-        onClose()
+        closeCallback()
     }
 }

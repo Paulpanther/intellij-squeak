@@ -59,6 +59,7 @@ qodana {
 
 dependencies {
     implementation("org.java-websocket:Java-WebSocket:1.5.3")
+    implementation("org.slf4j:slf4j-reload4j:2.0.3")
 }
 
 tasks {

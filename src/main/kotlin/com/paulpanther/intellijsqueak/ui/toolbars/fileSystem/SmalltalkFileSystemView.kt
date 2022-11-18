@@ -19,12 +19,14 @@ import com.intellij.util.ui.components.BorderLayoutPanel
 import com.intellij.util.ui.tree.TreeUtil
 import com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectContextMenu
 import com.paulpanther.intellijsqueak.services.SmalltalkProjectService
+import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.wsClient.SqueakClientStateListener
 
 class SmalltalkFileSystemView(
     project: Project,
     private val useFilter: Boolean = false
-): BorderLayoutPanel(), DumbAware, Disposable, DataProvider {
+): BorderLayoutPanel(), DumbAware, Disposable, DataProvider, SqueakClientStateListener {
     private val fileSystem = SmalltalkVirtualFileSystem()
 
     private val projectPackages by project.service<SmalltalkProjectService>().state::projectPackages
@@ -37,6 +39,8 @@ class SmalltalkFileSystemView(
         get() = TreeUtil.getAbstractTreeNode(TreeUtil.getSelectedPathIfOne(tree))
 
     init {
+        squeak.register(this)
+
         addToCenter(ScrollPaneFactory.createScrollPane(tree, true))
         tree.isRootVisible = false
         tree.isHorizontalAutoScrollingEnabled = false
@@ -76,5 +80,12 @@ class SmalltalkFileSystemView(
         } else {
             return structure.allNavigatables()
         }
+    }
+
+    override fun onOpen() {
+        fileSystem.refresh(false)
+    }
+
+    override fun onClose() {
     }
 }
