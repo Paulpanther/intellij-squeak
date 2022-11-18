@@ -25,7 +25,7 @@ data class SqueakRefreshFileSystemResult(
  * - async refresh_file_system -> RefreshFileSystemResult
  * - repeating transcript -> String
  */
-class SqueakClient(parent: Disposable): WSClientWrapper(parent) {
+class SqueakClient(parent: Disposable): WSClient(parent) {
     init {
         Disposer.register(parent, this)
     }

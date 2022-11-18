@@ -15,6 +15,7 @@ import com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 import com.paulpanther.intellijsqueak.ui.dialog.ConfirmDialog
 import com.paulpanther.intellijsqueak.util.runThread
+import com.paulpanther.intellijsqueak.wsClient.SqueakClientStateListener
 import java.awt.event.MouseEvent
 
 class SqueakWidgetFactory : StatusBarWidgetFactory {
@@ -26,19 +27,39 @@ class SqueakWidgetFactory : StatusBarWidgetFactory {
     override fun canBeEnabledOn(statusBar: StatusBar) = true
 }
 
-class SqueakWidget : StatusBarWidget, StatusBarWidget.IconPresentation {
+/**
+ * UI Widget in the bottom right corner.
+ * Clicking on it initiates connection to squeak.
+ */
+class SqueakWidget
+    : StatusBarWidget, StatusBarWidget.IconPresentation, SqueakClientStateListener {
+
+    private var statusBar: StatusBar? = null
+
+    init {
+        squeak.register(this)
+    }
+
     override fun getTooltipText() = "Configure Squeak Image"
-    override fun getIcon() = SmalltalkIcons.squeak
+    override fun getIcon() = if (squeak.open) SmalltalkIcons.squeakSelected else SmalltalkIcons.squeak
     override fun dispose() = Unit
     override fun ID() = "Squeak"
     override fun getPresentation() = this
-    override fun install(statusBar: StatusBar) = Unit
 
-    override fun getClickConsumer() =
-        Consumer<MouseEvent> {
-            connectSqueak()
-        }
+    override fun install(statusBar: StatusBar) {
+        this.statusBar = statusBar
+    }
 
+    override fun getClickConsumer() = Consumer<MouseEvent> {
+        connectSqueak()
+    }
+
+    /**
+     * 1. Check if connection is open
+     * 2. Try to connect
+     * 3. Start squeak
+     * 4. Try to connect
+     */
     private fun connectSqueak() {
         // Check if squeak is running and has connection
         if (squeak.open) {
@@ -52,7 +73,8 @@ class SqueakWidget : StatusBarWidget, StatusBarWidget.IconPresentation {
                 if (proceed) {
                     startSqueakExe { started ->
                         if (started) {
-                            squeak.connect { open2 ->
+                            // Retry because when server starts the first try will throw error
+                            squeak.connect(retryOnError = true) { open2 ->
                                 if (open2) {
                                     showNotification(
                                         "Connected to Squeak image",
@@ -109,5 +131,13 @@ class SqueakWidget : StatusBarWidget, StatusBarWidget.IconPresentation {
             .getNotificationGroup("Squeak Notification Group")
             .createNotification(text, type)
             .notify(null)
+    }
+
+    override fun onOpen() {
+        statusBar?.updateWidget(ID())
+    }
+
+    override fun onClose() {
+        statusBar?.updateWidget(ID())
     }
 }
