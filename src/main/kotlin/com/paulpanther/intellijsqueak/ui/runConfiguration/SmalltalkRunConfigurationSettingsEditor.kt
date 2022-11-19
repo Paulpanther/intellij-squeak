@@ -10,25 +10,20 @@ import javax.swing.JPanel
 class SmalltalkRunConfigurationSettingsEditor:
 	SettingsEditor<SmalltalkRunConfiguration>() {
 	private lateinit var myPanel: JPanel
-	private lateinit var myScriptName: LabeledComponent<TextFieldWithBrowseButton>
-	private lateinit var myEntryPoint: LabeledComponent<TextFieldWithBrowseButton>
+	private lateinit var myCode: LabeledComponent<TextFieldWithBrowseButton>
 
 	override fun resetEditorFrom(demoRunConfiguration: SmalltalkRunConfiguration) {
-		myScriptName.component.text = demoRunConfiguration.scriptName ?: return
-		myEntryPoint.component.text = demoRunConfiguration.entryPoint ?: return
+		myCode.component.text = demoRunConfiguration.code ?: return
 	}
 
 	override fun applyEditorTo(runConfig: SmalltalkRunConfiguration) {
-		runConfig.scriptName = myScriptName.component.text
-		runConfig.entryPoint = myEntryPoint.component.text
+		runConfig.code = myCode.component.text
 	}
 
 	override fun createEditor() = myPanel
 
 	private fun createUIComponents() {
-		myScriptName = LabeledComponent()
-		myScriptName.component = TextFieldWithBrowseButton()
-		myEntryPoint = LabeledComponent()
-		myEntryPoint.component = TextFieldWithBrowseButton()
+		myCode = LabeledComponent()
+		myCode.component = TextFieldWithBrowseButton()
 	}
 }

@@ -30,6 +30,10 @@ class SqueakClient(parent: Disposable): WSClient(parent) {
         Disposer.register(parent, this)
     }
 
+    fun evaluate(code: String) {
+        sendWithoutResponse("evaluate", code)
+    }
+
     fun fileContent(clazz: String, file: String): String? {
         return sendBlocking("file_content", SqueakFileContentAction(file, clazz))
     }

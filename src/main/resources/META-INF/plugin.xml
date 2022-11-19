@@ -42,11 +42,11 @@
                 implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkBraceMatcher"/>
         <configurationType
                 implementation="com.paulpanther.intellijsqueak.runConfiguration.SmalltalkRunConfigurationType"/>
-        <toolWindow
-                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectToolWindow"
-                id="Squeak Project"
-                icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"
-                anchor="left"/>
+<!--        <toolWindow-->
+<!--                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectToolWindow"-->
+<!--                id="Squeak Project"-->
+<!--                icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"-->
+<!--                anchor="left"/>-->
         <toolWindow
                 factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemToolWindow"
                 id="Squeak Image"
