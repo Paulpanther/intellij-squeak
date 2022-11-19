@@ -12,7 +12,7 @@ Execute code and see results in the Transcript.
 
 ## Installation
 
-Install [Squeak]() and either use [this image]() or install the [Intellij Plugin package]() via the Git browser.  
+Install [Squeak](https://github.com/Paulpanther/squeak-intellij-plugin) and install the [Intellij Plugin package](https://github.com/Paulpanther/squeak-intellij-plugin) via the Git browser.  
 
 - Using IDE built-in plugin system:
   
