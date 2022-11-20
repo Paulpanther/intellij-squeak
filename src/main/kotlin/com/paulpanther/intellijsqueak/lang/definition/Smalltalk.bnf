@@ -45,7 +45,9 @@
       extends(".*expr")=expr
 }
 
-file ::= <<isMethod>> method | <<isConsole>> expr
+file ::= <<isMethod>> method | <<isConsole>> console_line | console_line
+
+console_line ::= <<eof>> | expr
 
 method ::= selector temporaries? statement_body
 

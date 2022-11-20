@@ -17,8 +17,7 @@ class SmalltalkParserUtil: GeneratedParserUtilBase() {
 
         @JvmStatic
         fun isConsole(builder: PsiBuilder, level: Int): Boolean {
-            val file = builder.getUserData(FileContextUtil.CONTAINING_FILE_KEY)?.virtualFile
-            return file != null && file.getUserData(SMALLTALK_CONSOLE_KEY) == true
+            return builder.getUserData(FileContextUtil.CONTAINING_FILE_KEY)?.virtualFile == null
         }
     }
 }

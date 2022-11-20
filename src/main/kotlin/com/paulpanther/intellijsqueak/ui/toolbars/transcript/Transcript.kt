@@ -58,7 +58,7 @@ class Transcript(toolWindow: ToolWindow)
             .oneLineInput()
             .initActions(executeHandler, "st")
             .build(toolWindow.project, SmalltalkLanguage)
-        console.virtualFile.putUserData(SMALLTALK_CONSOLE_KEY, true)
+        console.file.putUserData(SMALLTALK_CONSOLE_KEY, true)
 
         // Copied from EventLogToolWindowFactory
         val editorPanel = object: JPanel(object: AbstractLayoutManager() {
