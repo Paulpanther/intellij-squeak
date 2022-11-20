@@ -28,7 +28,7 @@ class SmalltalkRunConfiguration(
     ) = RunProfileState { _, _ ->
         val toEvaluate = code
         if (squeak.open && toEvaluate != null) {
-            squeak.evaluate(toEvaluate)
+            squeak.evaluate(toEvaluate) { /* Ignore result */ }
         }
 
         DefaultExecutionResult()

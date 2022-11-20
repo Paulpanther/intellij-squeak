@@ -1,5 +1,6 @@
 {
-    parserClass="com.paulpanther.intellijsqueak.lang.SmalltalkParser"
+    parserClass="com.paulpanther.intellijsqueak.lang.definition.SmalltalkParser"
+    parserUtilClass="com.paulpanther.intellijsqueak.lang.definition.SmalltalkParserUtil"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -44,7 +45,7 @@
       extends(".*expr")=expr
 }
 
-file ::= method
+file ::= <<isMethod>> method | <<isConsole>> expr
 
 method ::= selector temporaries? statement_body
 

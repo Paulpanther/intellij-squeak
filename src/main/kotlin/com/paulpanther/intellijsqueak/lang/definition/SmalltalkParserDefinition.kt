@@ -7,7 +7,6 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
-import com.paulpanther.intellijsqueak.lang.SmalltalkParser
 import com.paulpanther.intellijsqueak.lang.SmalltalkTypes
 import com.paulpanther.intellijsqueak.lang.psi.SmalltalkFile
 
