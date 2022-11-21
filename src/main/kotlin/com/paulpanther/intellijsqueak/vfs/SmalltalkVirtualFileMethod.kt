@@ -15,7 +15,7 @@ class SmalltalkVirtualFileMethod (
         if (_originalContentOrNull != null) {
             _originalContentOrNull
         } else {
-            _originalContentOrNull = squeak.fileContent(clazz.name, name)
+            _originalContentOrNull = squeak.client.fileContent(clazz.name, name)
             _originalContentOrNull
         }
 
@@ -42,7 +42,7 @@ class SmalltalkVirtualFileMethod (
         val doc = manager.getDocument(this)
         if (doc != null && manager.isDocumentUnsaved(doc)) {
             val content = doc.text
-            if (squeak.open) squeak.writeFile(clazz.name, name, content)
+            if (squeak.client.open) squeak.client.writeFile(clazz.name, name, content)
             modifiedContent = content
         }
         return OutputStream.nullOutputStream()

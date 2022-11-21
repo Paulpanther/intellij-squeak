@@ -21,8 +21,8 @@ class SmalltalkVirtualFileSystem: VirtualFileSystem() {
     }
 
     override fun refresh(asynchronous: Boolean) {
-        if (squeak.open) {
-            squeak.refreshFileSystem(this) {
+        if (squeak.client.open) {
+            squeak.client.refreshFileSystem(this) {
                 changeListeners.forEach { it() }
             }
         }

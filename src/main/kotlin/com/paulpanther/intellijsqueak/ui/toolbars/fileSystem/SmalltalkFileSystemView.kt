@@ -39,7 +39,7 @@ class SmalltalkFileSystemView(
         get() = TreeUtil.getAbstractTreeNode(TreeUtil.getSelectedPathIfOne(tree))
 
     init {
-        squeak.register(this)
+        squeak.client.register(this)
 
         addToCenter(ScrollPaneFactory.createScrollPane(tree, true))
         tree.isRootVisible = false

@@ -17,7 +17,6 @@ import com.intellij.ui.scale.JBUIScale
 import com.intellij.util.ui.AbstractLayoutManager
 import com.paulpanther.intellijsqueak.lang.definition.SMALLTALK_CONSOLE_KEY
 import com.paulpanther.intellijsqueak.lang.definition.SmalltalkLanguage
-import com.paulpanther.intellijsqueak.services.smalltalkState
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.wsClient.SqueakClientStateListener
 import java.awt.Color
@@ -26,15 +25,17 @@ import java.awt.Dimension
 import javax.swing.JPanel
 
 class TranscriptFactory: ToolWindowFactory {
+    override fun init(toolWindow: ToolWindow) {
+        squeak.state.onEnabledChanged {
+            toolWindow.isAvailable = it
+        }
+    }
+
     override fun createToolWindowContent(
         project: Project,
         toolWindow: ToolWindow
     ) {
         val transcript = Transcript(toolWindow)
-
-        smalltalkState.onEnabledChanged {
-            toolWindow.isAvailable = it
-        }
 
         val manager = toolWindow.contentManager
         val content = manager.factory.createContent(
@@ -45,9 +46,7 @@ class TranscriptFactory: ToolWindowFactory {
         manager.addContent(content)
     }
 
-    override fun isApplicable(project: Project): Boolean {
-        return smalltalkState.enabled
-    }
+    override fun isApplicable(project: Project) = squeak.state.isEnabled
 }
 
 class Transcript(toolWindow: ToolWindow)
@@ -91,7 +90,7 @@ class Transcript(toolWindow: ToolWindow)
         }
         editorPanel.add(console.component)
 
-        squeak.onTranscriptChange {
+        squeak.client.onTranscriptChange {
             console.print(it + "\n", ConsoleViewContentType.SYSTEM_OUTPUT)
         }
 
@@ -102,7 +101,7 @@ class Transcript(toolWindow: ToolWindow)
     }
 
     private fun execute(text: String, console: LanguageConsoleView)  {
-        squeak.evaluate(text) {
+        squeak.client.evaluate(text) {
             console.print(it + "\n", ConsoleViewContentType.NORMAL_OUTPUT)
         }
     }

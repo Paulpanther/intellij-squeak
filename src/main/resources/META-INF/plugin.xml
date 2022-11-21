@@ -59,9 +59,7 @@
         <projectService
                 serviceImplementation="com.paulpanther.intellijsqueak.services.SmalltalkProjectService"/>
         <applicationService
-                serviceImplementation="com.paulpanther.intellijsqueak.services.SqueakClientService"/>
-        <applicationService
-                serviceImplementation="com.paulpanther.intellijsqueak.services.SmalltalkAppState"/>
+                serviceImplementation="com.paulpanther.intellijsqueak.services.SqueakAppService"/>
         <statusBarWidgetFactory
                 implementation="com.paulpanther.intellijsqueak.ui.widgets.SqueakWidgetFactory"/>
         <toolWindow

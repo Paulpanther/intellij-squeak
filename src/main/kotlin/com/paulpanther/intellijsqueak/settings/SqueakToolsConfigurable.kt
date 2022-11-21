@@ -1,33 +1,30 @@
 package com.paulpanther.intellijsqueak.settings
 
-import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
-import com.paulpanther.intellijsqueak.services.SqueakClientService
-import com.paulpanther.intellijsqueak.services.smalltalkState
+import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.settings.SqueakToolsSettings
 
 class SqueakToolsConfigurable: Configurable {
     private val component = SqueakToolsSettings()
-    private val state get() = service<SqueakClientService>().state
 
     override fun getDisplayName() = "Squeak/ Smalltalk"
     override fun createComponent() = component.panel
 
     override fun isModified(): Boolean {
-        return state.squeakPath != component.squeakPath.text
-                || state.squeakImage != component.squeakImage.text
-                || smalltalkState.enabled != component.enableSqueak.isEnabled
+        return squeak.state.squeakPath != component.squeakPath.text
+                || squeak.state.squeakImage != component.squeakImage.text
+                || squeak.state.isEnabled != component.enableSqueak.isSelected
     }
 
     override fun apply() {
-        state.squeakPath = component.squeakPath.text
-        state.squeakImage = component.squeakImage.text
-        smalltalkState.setEnabled(component.enableSqueak.isEnabled)
+        squeak.state.squeakPath = component.squeakPath.text
+        squeak.state.squeakImage = component.squeakImage.text
+        squeak.state.isEnabled = component.enableSqueak.isSelected
     }
 
     override fun reset() {
-        component.squeakPath.text = state.squeakPath
-        component.squeakImage.text = state.squeakImage
-        component.enableSqueak.isEnabled = smalltalkState.enabled
+        component.squeakPath.text = squeak.state.squeakPath
+        component.squeakImage.text = squeak.state.squeakImage
+        component.enableSqueak.isSelected = squeak.state.isEnabled
     }
 }

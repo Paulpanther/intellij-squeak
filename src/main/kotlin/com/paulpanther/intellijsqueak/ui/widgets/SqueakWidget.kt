@@ -2,14 +2,12 @@ package com.paulpanther.intellijsqueak.ui.widgets
 
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.components.service
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.StatusBarWidgetFactory
 import com.intellij.util.Consumer
-import com.paulpanther.intellijsqueak.services.SqueakClientService
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
@@ -21,27 +19,29 @@ import java.awt.event.MouseEvent
 class SqueakWidgetFactory : StatusBarWidgetFactory {
     override fun getId() = "Squeak"
     override fun getDisplayName() = "Squeak"
-    override fun isAvailable(project: Project) = true
     override fun createWidget(project: Project) = SqueakWidget()
     override fun disposeWidget(widget: StatusBarWidget) = widget.dispose()
     override fun canBeEnabledOn(statusBar: StatusBar) = true
+    override fun isAvailable(project: Project) = true
 }
 
 /**
  * UI Widget in the bottom right corner.
  * Clicking on it initiates connection to squeak.
  */
-class SqueakWidget
-    : StatusBarWidget, StatusBarWidget.IconPresentation, SqueakClientStateListener {
+class SqueakWidget: StatusBarWidget, StatusBarWidget.IconPresentation, SqueakClientStateListener {
 
     private var statusBar: StatusBar? = null
 
     init {
-        squeak.register(this)
+        squeak.client.register(this)
+        squeak.state.onEnabledChanged {
+            statusBar?.updateWidget(ID())
+        }
     }
 
     override fun getTooltipText() = "Configure Squeak Image"
-    override fun getIcon() = if (squeak.open) SmalltalkIcons.squeakSelected else SmalltalkIcons.squeak
+    override fun getIcon() = if (highlight()) SmalltalkIcons.squeakSelected else SmalltalkIcons.squeak
     override fun dispose() = Unit
     override fun ID() = "Squeak"
     override fun getPresentation() = this
@@ -49,6 +49,8 @@ class SqueakWidget
     override fun install(statusBar: StatusBar) {
         this.statusBar = statusBar
     }
+
+    private fun highlight() = squeak.state.isEnabled && squeak.client.open
 
     override fun getClickConsumer() = Consumer<MouseEvent> {
         connectSqueak()
@@ -61,20 +63,22 @@ class SqueakWidget
      * 4. Try to connect
      */
     private fun connectSqueak() {
+        if (!squeak.state.isEnabled) squeak.state.isEnabled = true
+
         // Check if squeak is running and has connection
-        if (squeak.open) {
+        if (squeak.client.open) {
             showNotification("Already connected", NotificationType.INFORMATION)
             return
         }
 
-        squeak.connect { open ->
+        squeak.client.connect { open ->
             if (!open) {
                 val proceed = askUserShouldStartSqueak()
                 if (proceed) {
                     startSqueakExe { started ->
                         if (started) {
                             // Retry because when server starts the first try will throw error
-                            squeak.connect(retryOnError = true) { open2 ->
+                            squeak.client.connect(retryOnError = true) { open2 ->
                                 if (open2) {
                                     showNotification(
                                         "Connected to Squeak image",
@@ -104,7 +108,7 @@ class SqueakWidget
 
     private fun startSqueakExe(callback: (success: Boolean) -> Unit) {
         runThread("Starting Squeak", false, callback) {
-            val startCommand = service<SqueakClientService>().executableCommand()
+            val startCommand = squeak.state.executableCommand()
 
             if (startCommand == null) {
                 ShowSettingsUtil.getInstance()
