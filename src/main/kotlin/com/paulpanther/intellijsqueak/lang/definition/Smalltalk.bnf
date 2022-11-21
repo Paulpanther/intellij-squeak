@@ -20,9 +20,9 @@
         WHITESPACE='regexp:\s+'
 
         IDENTIFIER='regexp:[a-zA-Z_]\w*'
-        KEYWORD='regexp:[a-zA-Z_]+:'
+        KEYWORD='regexp:[a-zA-Z_]\w*:'
         NUMBER='regexp:\d+'
-        BLOCK_ARGUMENT_IDENTIFIER='regexp::[a-zA-Z_]+'
+        BLOCK_ARGUMENT_IDENTIFIER='regexp::[a-zA-Z_]\w*'
         STRING="regexp:'[^']*'"
         CHARACTER="regexp:\$(\s|.)"
         BINARY_OPERATOR="regexp:[*+\\\-/~<>@=,%&?!]+"
@@ -35,6 +35,7 @@
         PARENTHESIS_END=')'
         ASSIGNMENT_OPERATOR=':='
         RETURN_OPERATOR='^'
+        CASCADE_OPERATOR=';'
         BLOCK_VARIABLE_SEPERATOR='|'
         BLOCK_START='['
         BLOCK_END=']'
@@ -45,16 +46,17 @@
       extends(".*expr")=expr
 }
 
-file ::= <<isMethod>> method | <<isConsole>> console_line | console_line
+file ::= <<isMethod>> method | <<isConsole>> console_line | method
 
 console_line ::= <<eof>> | expr
 
-method ::= selector temporaries? statement_body
+method ::= selector pragma? temporaries? statement_body
 
-private selector ::= keyword_selector | unary_selector
+private selector ::= keyword_selector | unary_selector | binary_selector
 
 unary_selector ::= named_identifier
 keyword_selector ::= (KEYWORD argument)+
+binary_selector ::= BINARY_OPERATOR argument
 
 temporaries ::= BLOCK_VARIABLE_SEPERATOR temporary+ BLOCK_VARIABLE_SEPERATOR
 
@@ -67,7 +69,7 @@ statement ::= expr | return
 
 return ::= RETURN_OPERATOR expr
 
-expr ::= primary | assignment_expr | unary_message_expr | keyword_message_expr | binary_message_expr
+expr ::= unary_message_expr | assignment_expr | keyword_message_expr | binary_message_expr | cascade_expr | primary
 
 unary_message_expr ::= expr IDENTIFIER
 
@@ -79,7 +81,18 @@ binary_message_expr ::= expr BINARY_OPERATOR expr
 
 parenthesized_expr ::= PARENTHESIS_START expr PARENTHESIS_END {pin=1}
 
-assignment_expr ::= variable ASSIGNMENT_OPERATOR expr { rightAssociative=true }
+assignment_expr ::= variable ASSIGNMENT_OPERATOR expr
+
+cascade_expr ::= expr (CASCADE_OPERATOR cascade_send)+
+
+private cascade_send ::= cascade_unary_expr | cascade_binary_expr | cascade_keyword_expr
+cascade_unary_expr ::= IDENTIFIER
+cascade_binary_expr ::= BINARY_OPERATOR expr
+cascade_keyword_expr ::= keyword_part+
+
+pragma ::= '<' (pragma_unary_selector | pragma_keyword_selector) '>'
+pragma_unary_selector ::= IDENTIFIER
+pragma_keyword_selector ::= KEYWORD primary
 
 private primary ::=
     literal_expr

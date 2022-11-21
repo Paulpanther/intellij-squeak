@@ -20,9 +20,15 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
         val parenthesis = TextAttributesKey
             .createTextAttributesKey("PARENTHESIS", DefaultLanguageHighlighterColors.PARENTHESES)
         val keyword = TextAttributesKey
-            .createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+            .createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
+        val methodKeyword = TextAttributesKey
+            .createTextAttributesKey("METHOD_KEYWORD", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
         val string = TextAttributesKey
             .createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING)
+        val symbol = TextAttributesKey
+            .createTextAttributesKey("SYMBOL", DefaultLanguageHighlighterColors.CONSTANT)
+        val character = TextAttributesKey
+            .createTextAttributesKey("CHARACTER", DefaultLanguageHighlighterColors.STRING)
         val assignment = TextAttributesKey
             .createTextAttributesKey("ASSIGNMENT", DefaultLanguageHighlighterColors.OPERATION_SIGN)
         val comment = TextAttributesKey
@@ -37,6 +43,8 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
             .createTextAttributesKey("ARGUMENT_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
         val returnOperator = TextAttributesKey
             .createTextAttributesKey("RETURN", DefaultLanguageHighlighterColors.KEYWORD)
+        val cascadeOperator = TextAttributesKey
+            .createTextAttributesKey("CASCADE", DefaultLanguageHighlighterColors.SEMICOLON)
     }
 
     override fun getHighlightingLexer() = SmalltalkLexerAdapter()
@@ -59,8 +67,11 @@ class SmalltalkSyntaxHighlighter: SyntaxHighlighterBase() {
             SmalltalkTypes.COMMENT -> key(comment)
             SmalltalkTypes.TEMPORARY -> key(temporaryDefinition)
             SmalltalkTypes.ARGUMENT -> key(argumentDefinition)
-            SmalltalkTypes.KEYWORD -> key(keyword)
+            SmalltalkTypes.KEYWORD -> key(methodKeyword)
             SmalltalkTypes.RETURN_OPERATOR -> key(returnOperator)
+            SmalltalkTypes.SYMBOL -> key(symbol)
+            SmalltalkTypes.CHARACTER -> key(character)
+            SmalltalkTypes.CASCADE_OPERATOR -> key(cascadeOperator)
             else -> arrayOf()
         }
     }
