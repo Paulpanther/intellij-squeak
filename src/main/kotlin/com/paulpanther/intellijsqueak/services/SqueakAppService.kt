@@ -32,6 +32,7 @@ class SqueakAppService: Disposable, PersistentStateComponent<SqueakAppService.St
         }
 
         fun executableCommand(): List<String>? {
+            if (squeakPath == "" || squeakImage == "") return null
             val exeFile = File(squeakPath ?: return null)
             val imageFile = File(squeakImage ?: return null)
             if (!exeFile.exists() || !imageFile.exists()) return null

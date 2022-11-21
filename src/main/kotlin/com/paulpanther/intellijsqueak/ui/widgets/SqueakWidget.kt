@@ -8,6 +8,7 @@ import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.StatusBarWidgetFactory
 import com.intellij.util.Consumer
+import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
@@ -111,8 +112,10 @@ class SqueakWidget: StatusBarWidget, StatusBarWidget.IconPresentation, SqueakCli
             val startCommand = squeak.state.executableCommand()
 
             if (startCommand == null) {
-                ShowSettingsUtil.getInstance()
-                    .showSettingsDialog(null, SqueakToolsConfigurable::class.java)
+                application.invokeLater {
+                    ShowSettingsUtil.getInstance()
+                        .showSettingsDialog(null, SqueakToolsConfigurable::class.java)
+                }
                 false
             } else {
                 val process = ProcessBuilder(startCommand).start()
