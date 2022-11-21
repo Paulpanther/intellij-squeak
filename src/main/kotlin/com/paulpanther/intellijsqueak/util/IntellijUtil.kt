@@ -1,5 +1,7 @@
 package com.paulpanther.intellijsqueak.util
 
+import com.intellij.openapi.module.Module
+import com.intellij.openapi.module.ModuleType
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
@@ -28,3 +30,5 @@ fun <T> runThread(
             }, indicator)
     }.start()
 }
+
+val Module.moduleType get() = ModuleType.get(this)

@@ -4,12 +4,15 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.LabeledComponent
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import javax.swing.JCheckBox
 import javax.swing.JPanel
 
+// TODO change to kotlin UI dsl
 class SqueakToolsSettings {
     lateinit var panel: JPanel
     lateinit var squeakPathComponent: LabeledComponent<TextFieldWithBrowseButton>
     lateinit var squeakImageComponent: LabeledComponent<TextFieldWithBrowseButton>
+    lateinit var enableSqueak: JCheckBox
 
     val squeakPath get() = squeakPathComponent.component.textField
     val squeakImage get() = squeakImageComponent.component.textField
@@ -23,6 +26,7 @@ class SqueakToolsSettings {
             "The Image that will connect to") {
             withFileFilter { it.extension == "image" }
         }
+        enableSqueak = JCheckBox("Enable Squeak Integration")
     }
 
     private fun createLabeledBrowseTextField(

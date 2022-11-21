@@ -5,7 +5,7 @@ import com.intellij.ide.util.projectWizard.WizardContext
 import com.intellij.openapi.Disposable
 
 class SmalltalkModuleBuilder: ModuleBuilder() {
-    override fun getModuleType() = SmalltalkModuleType
+    override fun getModuleType() = SmalltalkModuleType.instance
 
     override fun getCustomOptionsStep(
         context: WizardContext?,

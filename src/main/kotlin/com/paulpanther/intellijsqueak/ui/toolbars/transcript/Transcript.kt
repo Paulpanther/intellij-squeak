@@ -17,6 +17,7 @@ import com.intellij.ui.scale.JBUIScale
 import com.intellij.util.ui.AbstractLayoutManager
 import com.paulpanther.intellijsqueak.lang.definition.SMALLTALK_CONSOLE_KEY
 import com.paulpanther.intellijsqueak.lang.definition.SmalltalkLanguage
+import com.paulpanther.intellijsqueak.services.smalltalkState
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.wsClient.SqueakClientStateListener
 import java.awt.Color
@@ -31,6 +32,10 @@ class TranscriptFactory: ToolWindowFactory {
     ) {
         val transcript = Transcript(toolWindow)
 
+        smalltalkState.onEnabledChanged {
+            toolWindow.isAvailable = it
+        }
+
         val manager = toolWindow.contentManager
         val content = manager.factory.createContent(
             transcript,
@@ -38,6 +43,10 @@ class TranscriptFactory: ToolWindowFactory {
             false
         ).apply { isCloseable = false }
         manager.addContent(content)
+    }
+
+    override fun isApplicable(project: Project): Boolean {
+        return smalltalkState.enabled
     }
 }
 

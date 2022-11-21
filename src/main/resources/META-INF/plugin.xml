@@ -14,6 +14,9 @@
         <moduleBuilder
                 builderClass="com.paulpanther.intellijsqueak.ui.module.SmalltalkModuleBuilder"
                 id="SMALLTALK_MODULE_BUILDER"/>
+        <moduleType
+                id="SMALLTALK_MODULE_TYPE"
+                implementationClass="com.paulpanther.intellijsqueak.ui.module.SmalltalkModuleType"/>
         <newProjectWizard.language
                 implementation="com.paulpanther.intellijsqueak.ui.newProjectWizard.SmalltalkNewProjectWizard"/>
         <lang.parserDefinition
@@ -42,11 +45,11 @@
                 implementationClass="com.paulpanther.intellijsqueak.editor.SmalltalkBraceMatcher"/>
         <configurationType
                 implementation="com.paulpanther.intellijsqueak.runConfiguration.SmalltalkRunConfigurationType"/>
-<!--        <toolWindow-->
-<!--                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectToolWindow"-->
-<!--                id="Squeak Project"-->
-<!--                icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"-->
-<!--                anchor="left"/>-->
+        <!--        <toolWindow-->
+        <!--                factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.project.SmalltalkProjectToolWindow"-->
+        <!--                id="Squeak Project"-->
+        <!--                icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"-->
+        <!--                anchor="left"/>-->
         <toolWindow
                 factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemToolWindow"
                 id="Squeak Image"
@@ -57,6 +60,8 @@
                 serviceImplementation="com.paulpanther.intellijsqueak.services.SmalltalkProjectService"/>
         <applicationService
                 serviceImplementation="com.paulpanther.intellijsqueak.services.SqueakClientService"/>
+        <applicationService
+                serviceImplementation="com.paulpanther.intellijsqueak.services.SmalltalkAppState"/>
         <statusBarWidgetFactory
                 implementation="com.paulpanther.intellijsqueak.ui.widgets.SqueakWidgetFactory"/>
         <toolWindow
@@ -67,8 +72,8 @@
                 displayType="BALLOON"
                 id="Squeak Notification Group"/>
         <applicationConfigurable
-            parentId="tools"
-            instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
-            displayName="Squeak/ Smalltalk" />
+                parentId="tools"
+                instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
+                displayName="Squeak/ Smalltalk"/>
     </extensions>
 </idea-plugin>
