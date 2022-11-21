@@ -10,6 +10,8 @@ Connect to a running Squeak image to browse, read and edit Smalltalk files.
 Execute code and see results in the Transcript. 
 <!-- Plugin description end -->
 
+![](ide-screenshot.png)
+
 ## Installation
 
 Install [Squeak](https://github.com/Paulpanther/squeak-intellij-plugin) and install the [Intellij Plugin package](https://github.com/Paulpanther/squeak-intellij-plugin) via the Git browser.  
