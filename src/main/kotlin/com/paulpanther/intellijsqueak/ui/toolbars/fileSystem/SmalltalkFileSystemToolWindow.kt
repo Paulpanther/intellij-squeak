@@ -6,14 +6,18 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.paulpanther.intellijsqueak.services.squeak
 
 class SmalltalkFileSystemToolWindow : ToolWindowFactory {
+    override fun init(toolWindow: ToolWindow) {
+        squeak.onEnabledChanged {
+            toolWindow.isAvailable = it
+        }
+    }
+
+    override fun shouldBeAvailable(project: Project) = squeak.isEnabled
+
     override fun createToolWindowContent(
         project: Project,
         toolWindow: ToolWindow
     ) {
-        squeak.state.onEnabledChanged {
-            toolWindow.isAvailable = it
-        }
-
         val manager = toolWindow.contentManager
         val content = manager.factory.createContent(
             SmalltalkFileSystemView(project),
@@ -23,5 +27,5 @@ class SmalltalkFileSystemToolWindow : ToolWindowFactory {
         manager.addContent(content)
     }
 
-    override fun isApplicable(project: Project) = squeak.state.isEnabled
+    override fun isApplicable(project: Project) = true
 }

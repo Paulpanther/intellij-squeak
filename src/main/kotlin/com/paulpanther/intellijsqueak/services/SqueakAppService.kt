@@ -7,37 +7,35 @@ import java.io.File
 
 @Service
 @State(
-    name = "squeak-global-state",
-    storages = [Storage("SqueakPlugin.xml")])
+    name = "squeak-app-state",
+    storages = [Storage("SqueakPluginApp.xml")])
 class SqueakAppService: Disposable, PersistentStateComponent<SqueakAppService.State> {
     val client = SqueakClient(this)
     private var state = State()
+    private val enabledListeners = mutableListOf<(enabled: Boolean) -> Unit>()
 
     data class State(
-        private var _isEnabled: Boolean = true,
+        var _isEnabled: Boolean = true,
         var squeakPath: String? = null,
-        var squeakImage: String? = null) {
+        var squeakImage: String? = null)
 
-        private val enabledListeners = mutableListOf<(enabled: Boolean) -> Unit>()
-
-        var isEnabled
-            get() = _isEnabled
-            set(value) {
-                _isEnabled = value
-                enabledListeners.forEach { it(value) }
-            }
-
-        fun onEnabledChanged(listener: (enabled: Boolean) -> Unit) {
-            enabledListeners += listener
+    var isEnabled
+        get() = state._isEnabled
+        set(value) {
+            state._isEnabled = value
+            enabledListeners.forEach { it(value) }
         }
 
-        fun executableCommand(): List<String>? {
-            if (squeakPath == "" || squeakImage == "") return null
-            val exeFile = File(squeakPath ?: return null)
-            val imageFile = File(squeakImage ?: return null)
-            if (!exeFile.exists() || !imageFile.exists()) return null
-            return listOf(exeFile.absolutePath, imageFile.absolutePath)
-        }
+    fun onEnabledChanged(listener: (enabled: Boolean) -> Unit) {
+        enabledListeners += listener
+    }
+
+    fun executableCommand(): List<String>? {
+        if (state.squeakPath == "" || state.squeakImage == "") return null
+        val exeFile = File(state.squeakPath ?: return null)
+        val imageFile = File(state.squeakImage ?: return null)
+        if (!exeFile.exists() || !imageFile.exists()) return null
+        return listOf(exeFile.absolutePath, imageFile.absolutePath)
     }
 
     override fun getState() = state

@@ -54,8 +54,7 @@
                 factoryClass="com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemToolWindow"
                 id="Squeak Image"
                 icon="com.paulpanther.intellijsqueak.ui.SmalltalkIcons.smalltalk"
-                anchor="left"
-                secondary="true"/>
+                anchor="left"/>
         <projectService
                 serviceImplementation="com.paulpanther.intellijsqueak.services.SmalltalkProjectService"/>
         <applicationService

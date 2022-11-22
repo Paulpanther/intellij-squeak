@@ -13,18 +13,18 @@ class SqueakToolsConfigurable: Configurable {
     override fun isModified(): Boolean {
         return squeak.state.squeakPath != component.squeakPath.text
                 || squeak.state.squeakImage != component.squeakImage.text
-                || squeak.state.isEnabled != component.enableSqueak.isSelected
+                || squeak.isEnabled != component.enableSqueak.isSelected
     }
 
     override fun apply() {
         squeak.state.squeakPath = component.squeakPath.text
         squeak.state.squeakImage = component.squeakImage.text
-        squeak.state.isEnabled = component.enableSqueak.isSelected
+        squeak.isEnabled = component.enableSqueak.isSelected
     }
 
     override fun reset() {
         component.squeakPath.text = squeak.state.squeakPath
         component.squeakImage.text = squeak.state.squeakImage
-        component.enableSqueak.isSelected = squeak.state.isEnabled
+        component.enableSqueak.isSelected = squeak.isEnabled
     }
 }

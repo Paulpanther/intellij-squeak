@@ -36,7 +36,7 @@ class SqueakWidget: StatusBarWidget, StatusBarWidget.IconPresentation, SqueakCli
 
     init {
         squeak.client.register(this)
-        squeak.state.onEnabledChanged {
+        squeak.onEnabledChanged {
             statusBar?.updateWidget(ID())
         }
     }
@@ -51,7 +51,7 @@ class SqueakWidget: StatusBarWidget, StatusBarWidget.IconPresentation, SqueakCli
         this.statusBar = statusBar
     }
 
-    private fun highlight() = squeak.state.isEnabled && squeak.client.open
+    private fun highlight() = squeak.isEnabled && squeak.client.open
 
     override fun getClickConsumer() = Consumer<MouseEvent> {
         connectSqueak()
@@ -64,7 +64,7 @@ class SqueakWidget: StatusBarWidget, StatusBarWidget.IconPresentation, SqueakCli
      * 4. Try to connect
      */
     private fun connectSqueak() {
-        if (!squeak.state.isEnabled) squeak.state.isEnabled = true
+        if (!squeak.isEnabled) squeak.isEnabled = true
 
         // Check if squeak is running and has connection
         if (squeak.client.open) {
@@ -109,7 +109,7 @@ class SqueakWidget: StatusBarWidget, StatusBarWidget.IconPresentation, SqueakCli
 
     private fun startSqueakExe(callback: (success: Boolean) -> Unit) {
         runThread("Starting Squeak", false, callback) {
-            val startCommand = squeak.state.executableCommand()
+            val startCommand = squeak.executableCommand()
 
             if (startCommand == null) {
                 application.invokeLater {
