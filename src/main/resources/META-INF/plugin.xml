@@ -74,4 +74,16 @@
                 instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
                 displayName="Squeak/ Smalltalk"/>
     </extensions>
+    <actions>
+        <group
+                id="Smalltalk.FileSystemGroup"
+                class="com.paulpanther.intellijsqueak.actions.FileSystemGroup"
+                text="File System Actions"
+                popup="true">
+        </group>
+        <action
+                id="com.paulpanther.intellijsqueak.actions.NewMethodAction"
+                class="com.paulpanther.intellijsqueak.actions.NewMethodAction"
+                text="New Method"/>
+    </actions>
 </idea-plugin>

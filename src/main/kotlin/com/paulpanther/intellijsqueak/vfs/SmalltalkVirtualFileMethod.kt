@@ -22,11 +22,10 @@ class SmalltalkVirtualFileMethod (
     private var modifiedContent: String? = null
     private val content get() = modifiedContent ?: originalContent
 
-    val clazz get() = category.clazz
+    val clazz get() = category.classNode
 
-    override fun findFile(path: String): SmalltalkVirtualFile? {
-        if (path == "") return this
-        return null
+    override fun findFile(path: List<String>): SmalltalkVirtualFile? {
+        return if (path.isEmpty()) this else null
     }
 
     override fun isDirectory() = false

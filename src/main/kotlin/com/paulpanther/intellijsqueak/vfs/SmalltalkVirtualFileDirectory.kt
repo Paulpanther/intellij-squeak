@@ -9,14 +9,19 @@ abstract class SmalltalkVirtualFileDirectory<T: SmalltalkVirtualFile>(
     name: String,
     var myChildren: MutableList<T> = mutableListOf()
 ): SmalltalkVirtualFile(mySystem, parent, name) {
-    override fun findFile(path: String): SmalltalkVirtualFile? {
-        val childName = path.split(".").firstOrNull() ?: return null
-        return children.find { it.name == childName }
+
+    override fun findFile(path: List<String>): SmalltalkVirtualFile? {
+        val childName = path.firstOrNull() ?: return null
+        val child = children.find { it.name == childName } ?: return null
+        if (path.size == 1) return child
+        return child.findFile(path.drop(1))
     }
 
     override fun isDirectory() = true
 
     override fun getChildren() = myChildren.toTypedArray<SmalltalkVirtualFile>()
+
+    abstract fun createChild(name: String): Boolean
 
     fun setChildren(children: List<T>) {
         myChildren = children.toMutableList()
@@ -34,14 +39,4 @@ abstract class SmalltalkVirtualFileDirectory<T: SmalltalkVirtualFile>(
 
     override fun getInputStream(): InputStream =
         InputStream.nullInputStream()
-
-    override fun refresh(
-        asynchronous: Boolean,
-        recursive: Boolean,
-        postRunnable: Runnable?
-    ) {
-        for (child in children) {
-            child.refresh(asynchronous, recursive, postRunnable)
-        }
-    }
 }

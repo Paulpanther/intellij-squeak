@@ -17,7 +17,7 @@ sealed class SmalltalkVirtualFile(
         return "$parentPath.$name"
     }
 
-    abstract fun findFile(path: String): SmalltalkVirtualFile?
+    abstract fun findFile(path: List<String>): SmalltalkVirtualFile?
 
     override fun getName() = myName
 
@@ -37,4 +37,12 @@ sealed class SmalltalkVirtualFile(
         // TODO
         return 0L
     }
+}
+
+val SmalltalkVirtualFile.typeName get() = when (this) {
+    is SmalltalkVirtualFileMethod -> "method"
+    is SmalltalkVirtualFileCategory -> "category"
+    is SmalltalkVirtualFileClass -> "class"
+    is SmalltalkVirtualFilePackage -> "package"
+    else -> error("Could not get type name")
 }

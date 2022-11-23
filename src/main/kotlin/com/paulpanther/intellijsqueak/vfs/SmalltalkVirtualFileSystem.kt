@@ -17,15 +17,24 @@ class SmalltalkVirtualFileSystem: VirtualFileSystem() {
     override fun getProtocol() = "squeak"
 
     override fun findFileByPath(path: String): VirtualFile? {
-        return root.findFile(path)
+        return findFileByPath(path.split("."))
+    }
+
+    fun findFileByPath(path: List<String>): VirtualFile? {
+        val savePath = if (path.firstOrNull() == "squeak") path.drop(1) else path
+        return root.findFile(savePath)
     }
 
     override fun refresh(asynchronous: Boolean) {
         if (squeak.client.open) {
             squeak.client.refreshFileSystem(this) {
-                changeListeners.forEach { it() }
+                callChangeListeners()
             }
         }
+    }
+
+    fun callChangeListeners() {
+        changeListeners.forEach { it() }
     }
 
     fun onChange(listener: () -> Unit) {
