@@ -8,10 +8,8 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.ui.SimpleTextAttributes
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileMethod
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFilePackage
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.vfs.*
+import javax.swing.Icon
 
 
 class SmalltalkFileSystemNode(
@@ -23,11 +21,21 @@ class SmalltalkFileSystemNode(
 
     override fun update(presentation: PresentationData) {
         presentation.presentableText = file.name
-        presentation.setIcon(SmalltalkIcons.smalltalk)
+        presentation.setIcon(icon())
         presentation.addText(
             "${presentation.presentableText}  ",
             SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES
         )
+    }
+
+    private fun icon(): Icon {
+        return when (file) {
+            is SmalltalkVirtualFilePackage -> SmalltalkIcons.packageIcon
+            is SmalltalkVirtualFileCategory -> SmalltalkIcons.categoryInstance
+            is SmalltalkVirtualFileClass -> SmalltalkIcons.clazz
+            is SmalltalkVirtualFileMethod -> SmalltalkIcons.method
+            else -> SmalltalkIcons.smalltalk
+        }
     }
 
     override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {

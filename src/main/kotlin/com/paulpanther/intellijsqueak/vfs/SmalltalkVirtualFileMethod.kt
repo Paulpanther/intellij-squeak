@@ -42,10 +42,20 @@ class SmalltalkVirtualFileMethod (
         val doc = manager.getDocument(this)
         if (doc != null && manager.isDocumentUnsaved(doc)) {
             val content = doc.text
-            if (squeak.client.open) squeak.client.writeFile(clazz.name, name, content)
+
+            val formattedContent = content.lines().joinToString("\r", transform = ::replaceSpacesWithTabs)
+
+            if (squeak.client.open) squeak.client.writeFile(clazz.name, name, formattedContent)
             modifiedContent = content
         }
         return OutputStream.nullOutputStream()
+    }
+
+    private fun replaceSpacesWithTabs(line: String): String {
+        val content = line.dropWhile { it == ' ' }
+        val spaces = line.length - content.length
+        val tabs = spaces / 4
+        return (0 until tabs).joinToString("") { "\t" } + content
     }
 
     override fun contentsToByteArray(): ByteArray {
