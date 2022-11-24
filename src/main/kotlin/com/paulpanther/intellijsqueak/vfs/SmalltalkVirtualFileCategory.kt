@@ -10,15 +10,28 @@ class SmalltalkVirtualFileCategory(
     val methods get() = myChildren.toList()
 
     override fun createChild(name: String): Boolean {
-        val validMethodName = name.matches(Regex("([*+\\\\\\-/~<>@=,%&?!]+)|([a-zA-Z]\\w*)"))
-        val canCreate = validMethodName && !methods.any { it.name == name }
+        val binaryMethodName = name.matches(Regex("[*+\\\\\\-/~<>@=,%&?!]+"))
+        val unaryMethodName = name.matches(Regex("[a-zA-Z]\\w*"))
+        val keywordMethodName = name.matches(Regex("([a-zA-Z]\\w*:\\s*)+"))
+
+        val sanitizedName = if (keywordMethodName) {
+            name.replace(" ", "")
+        } else name
+
+        val canCreate = (binaryMethodName || unaryMethodName || keywordMethodName) && !methods.any { it.name == sanitizedName }
         if (!canCreate) return false
 
-        squeak.client.newMethod(classNode.name, this.name, name) {
+        squeak.client.newMethod(classNode.name, this.name, sanitizedName) {
             refresh(true, false)
         }
 
         return true
+    }
+
+    override fun delete(requestor: Any?) {
+        squeak.client.removeCategory(classNode.name, name) {
+            classNode.refresh(true, false)
+        }
     }
 
     override fun refresh(

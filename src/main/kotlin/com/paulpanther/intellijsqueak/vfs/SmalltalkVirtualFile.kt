@@ -37,6 +37,8 @@ sealed class SmalltalkVirtualFile(
         // TODO
         return 0L
     }
+
+    abstract override fun delete(requestor: Any?)
 }
 
 val SmalltalkVirtualFile.typeName get() = when (this) {

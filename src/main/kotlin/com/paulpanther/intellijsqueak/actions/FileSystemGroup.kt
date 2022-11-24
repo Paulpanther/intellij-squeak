@@ -24,7 +24,13 @@ class FileSystemGroup(
         val file = system.findFileByPath(path.path.map { it.toString() })
 
         return when (file) {
-            is SmalltalkVirtualFileCategory -> arrayOf(NewMethodAction(file))
+            is SmalltalkVirtualFileCategory -> arrayOf(
+                NewMethodAction(file),
+            )
+            is SmalltalkVirtualFileMethod -> arrayOf(
+                NewMethodAction(file.category),
+                RemoveMethodAction(file),
+            )
             else -> arrayOf()
         }
     }

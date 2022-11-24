@@ -1,6 +1,7 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.intellij.openapi.fileEditor.FileDocumentManager
+import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import java.io.InputStream
 import java.io.OutputStream
@@ -68,5 +69,13 @@ class SmalltalkVirtualFileMethod (
 
     override fun getInputStream(): InputStream {
         return content?.byteInputStream() ?: "".byteInputStream()
+    }
+
+    override fun delete(requestor: Any?) {
+        squeak.client.removeMethod(clazz.name, name) {
+            application.invokeLater {
+                category.refresh(true, false)
+            }
+        }
     }
 }

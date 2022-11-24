@@ -60,8 +60,8 @@ class SmalltalkFileSystemView(
         FileSystemGroup(fileSystem, tree)
 
         fileSystem.onChange {
-            repaint()
             model.invalidate()
+            repaint()
         }
     }
 

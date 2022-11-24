@@ -85,5 +85,9 @@
                 id="com.paulpanther.intellijsqueak.actions.NewMethodAction"
                 class="com.paulpanther.intellijsqueak.actions.NewMethodAction"
                 text="New Method"/>
+        <action
+                id="com.paulpanther.intellijsqueak.actions.RemoveMethodAction"
+                class="com.paulpanther.intellijsqueak.actions.RemoveMethodAction"
+                text="Remove Method"/>
     </actions>
 </idea-plugin>

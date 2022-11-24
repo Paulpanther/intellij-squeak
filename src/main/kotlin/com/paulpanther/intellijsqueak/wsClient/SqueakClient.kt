@@ -3,10 +3,7 @@ package com.paulpanther.intellijsqueak.wsClient
 import com.google.gson.annotations.SerializedName
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileCategory
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileClass
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFilePackage
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.vfs.*
 
 private class SqueakFileContentAction(
     val file: String,
@@ -50,6 +47,24 @@ private class SqueakRefreshClassAction(
     val clazz: String)
 
 private class SqueakRefreshPackageAction(
+    @SerializedName("package")
+    val packageName: String)
+
+private class SqueakRemoveMethodAction(
+    @SerializedName("class")
+    val clazz: String,
+    val method: String)
+
+private class SqueakRemoveCategoryAction(
+    @SerializedName("class")
+    val clazz: String,
+    val category: String)
+
+private class SqueakRemoveClassAction(
+    @SerializedName("class")
+    val clazz: String)
+
+private class SqueakRemovePackageAction(
     @SerializedName("package")
     val packageName: String)
 
@@ -139,6 +154,22 @@ class SqueakClient(parent: Disposable): WSClient(parent) {
             categoryNode.myChildren.addAll(it.toVirtualFileCategory(system, categoryNode.classNode).methods)
             onResult()
         }
+    }
+
+    fun removeMethod(className: String, methodName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("remove_method", SqueakRemoveMethodAction(className, methodName), callback)
+    }
+
+    fun removeCategory(className: String, categoryName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("remove_category", SqueakRemoveCategoryAction(className, categoryName), callback)
+    }
+
+    fun removeClass(className: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("remove_class", SqueakRemoveClassAction(className), callback)
+    }
+
+    fun removePackage(packageName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("remove_package", SqueakRemovePackageAction(packageName), callback)
     }
 
     fun onTranscriptChange(listener: (msg: String) -> Unit) {

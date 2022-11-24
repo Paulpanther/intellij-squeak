@@ -4,9 +4,9 @@ import com.paulpanther.intellijsqueak.services.squeak
 
 class SmalltalkVirtualFilePackage(
     system: SmalltalkVirtualFileSystem,
-    parent: SmalltalkVirtualFileRoot,
+    private val root: SmalltalkVirtualFileRoot,
     name: String
-): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileClass>(system, parent, name) {
+): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileClass>(system, root, name) {
     val classes get() = myChildren.toList()
 
     override fun createChild(name: String): Boolean {
@@ -19,6 +19,12 @@ class SmalltalkVirtualFilePackage(
         }
 
         return true
+    }
+
+    override fun delete(requestor: Any?) {
+        squeak.client.removePackage(name) {
+            root.refresh(true, false)
+        }
     }
 
     override fun refresh(

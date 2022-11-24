@@ -18,6 +18,8 @@ class SmalltalkVirtualFileRoot(
         return true
     }
 
+    override fun delete(requestor: Any?) {}
+
     override fun refresh(
         asynchronous: Boolean,
         recursive: Boolean,

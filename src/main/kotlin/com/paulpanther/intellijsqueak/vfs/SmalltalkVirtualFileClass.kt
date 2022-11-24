@@ -20,6 +20,12 @@ class SmalltalkVirtualFileClass(
         return true
     }
 
+    override fun delete(requestor: Any?) {
+        squeak.client.removeClass(this.name) {
+            packageNode.refresh(true, false)
+        }
+    }
+
     override fun refresh(
         asynchronous: Boolean,
         recursive: Boolean,
