@@ -3,6 +3,7 @@ package com.paulpanther.intellijsqueak.vfs
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
+import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -88,4 +89,6 @@ class SmalltalkVirtualFileMethod (
             }
         }
     }
+
+    override fun icon() = SmalltalkIcons.method
 }

@@ -2,6 +2,8 @@ package com.paulpanther.intellijsqueak.vfs
 
 import com.intellij.openapi.vfs.VirtualFile
 import com.paulpanther.intellijsqueak.lang.definition.SmalltalkFileType
+import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
+import javax.swing.Icon
 
 sealed class SmalltalkVirtualFile(
     private val mySystem: SmalltalkVirtualFileSystem,
@@ -39,6 +41,8 @@ sealed class SmalltalkVirtualFile(
     }
 
     abstract override fun delete(requestor: Any?)
+
+    abstract fun icon(): Icon?
 }
 
 val SmalltalkVirtualFile.typeName get() = when (this) {
@@ -47,4 +51,12 @@ val SmalltalkVirtualFile.typeName get() = when (this) {
     is SmalltalkVirtualFileClass -> "class"
     is SmalltalkVirtualFilePackage -> "package"
     else -> error("Could not get type name")
+}
+
+val SmalltalkVirtualFile.childIcon get() = when (this) {
+    is SmalltalkVirtualFileCategory -> SmalltalkIcons.method
+    is SmalltalkVirtualFileClass -> SmalltalkIcons.categoryInstance
+    is SmalltalkVirtualFilePackage -> SmalltalkIcons.clazz
+    is SmalltalkVirtualFileRoot -> SmalltalkIcons.packageIcon
+    else -> null
 }

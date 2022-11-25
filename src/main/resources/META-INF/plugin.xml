@@ -81,12 +81,16 @@
                 popup="true">
         </group>
         <action
-                id="com.paulpanther.intellijsqueak.actions.NewMethodAction"
-                class="com.paulpanther.intellijsqueak.actions.NewMethodAction"
-                text="New Method"/>
+                id="com.paulpanther.intellijsqueak.actions.NewFileAction"
+                class="com.paulpanther.intellijsqueak.actions.NewFileAction"
+                text="New File"/>
         <action
-                id="com.paulpanther.intellijsqueak.actions.RemoveMethodAction"
-                class="com.paulpanther.intellijsqueak.actions.RemoveMethodAction"
-                text="Remove Method"/>
+                id="com.paulpanther.intellijsqueak.actions.RemoveFileAction"
+                class="com.paulpanther.intellijsqueak.actions.RemoveFileAction"
+                text="Remove File"/>
+        <action
+                id="com.paulpanther.intellijsqueak.actions.RefreshFileAction"
+                class="com.paulpanther.intellijsqueak.actions.RefreshFileAction"
+                text="Refresh File"/>
     </actions>
 </idea-plugin>

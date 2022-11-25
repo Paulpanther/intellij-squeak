@@ -1,6 +1,7 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.paulpanther.intellijsqueak.services.squeak
+import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 
 class SmalltalkVirtualFileCategory(
     system: SmalltalkVirtualFileSystem,
@@ -33,6 +34,8 @@ class SmalltalkVirtualFileCategory(
             classNode.refresh(true, false)
         }
     }
+
+    override fun icon() = SmalltalkIcons.categoryInstance
 
     override fun refresh(
         asynchronous: Boolean,

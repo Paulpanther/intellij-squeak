@@ -1,10 +1,11 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.paulpanther.intellijsqueak.services.squeak
+import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 
 class SmalltalkVirtualFilePackage(
     system: SmalltalkVirtualFileSystem,
-    private val root: SmalltalkVirtualFileRoot,
+    val root: SmalltalkVirtualFileRoot,
     name: String
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileClass>(system, root, name) {
     val classes get() = myChildren.toList()
@@ -26,6 +27,8 @@ class SmalltalkVirtualFilePackage(
             root.refresh(true, false)
         }
     }
+
+    override fun icon() = SmalltalkIcons.packageIcon
 
     override fun refresh(
         asynchronous: Boolean,

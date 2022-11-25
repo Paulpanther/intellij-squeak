@@ -4,11 +4,7 @@ import com.intellij.openapi.actionSystem.ActionGroup
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.ui.PopupHandler
-import com.paulpanther.intellijsqueak.services.squeak
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileCategory
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileMethod
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.vfs.*
 import javax.swing.JTree
 
 class FileSystemGroup(
@@ -24,13 +20,23 @@ class FileSystemGroup(
         val file = system.findFileByPath(path.path.map { it.toString() })
 
         return when (file) {
+            is SmalltalkVirtualFilePackage -> arrayOf(
+                NewFileAction("Class", "Package", file),
+                NewFileAction("Package", null, file.root),
+                RefreshFileAction("Package", file),
+                RemoveFileAction("Package", null, file))
+            is SmalltalkVirtualFileClass -> arrayOf(
+                NewFileAction("Category", "Class", file),
+                RefreshFileAction("Class", file),
+                RemoveFileAction("Class", "Package", file))
             is SmalltalkVirtualFileCategory -> arrayOf(
-                NewMethodAction(file),
-            )
+                NewFileAction("Method", "Category", file),
+                RefreshFileAction("Category", file),
+                RemoveFileAction("Category", "Class", file))
             is SmalltalkVirtualFileMethod -> arrayOf(
-                NewMethodAction(file.category),
-                RemoveMethodAction(file),
-            )
+                NewFileAction("Method", "Category", file.category),
+                RefreshFileAction("Method", file),
+                RemoveFileAction("Method", "Category", file))
             else -> arrayOf()
         }
     }

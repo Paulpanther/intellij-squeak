@@ -3,17 +3,18 @@ package com.paulpanther.intellijsqueak.ui.dialog
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.dsl.builder.panel
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileCategory
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileDirectory
 import javax.swing.Action
 import javax.swing.JComponent
 
-class AddMethodDialog(
+class AddFileDialog(
     project: Project,
-    private val parent: SmalltalkVirtualFileCategory
+    childName: String,
+    parentName: String?,
+    private val parent: SmalltalkVirtualFileDirectory<*>
 ): DialogWrapper(project, false) {
     init {
-        title = "Add Method to Category ${parent.name}"
+        this.title = "Create $childName${parentName?.let { "for $parentName ${parent.name}" } ?: ""}"
         init()
     }
 
