@@ -14,6 +14,10 @@ class SmalltalkVirtualFileSystem: VirtualFileSystem() {
         refresh(true)
     }
 
+    val classes get() = root.packages.flatMap { it.classes }
+
+    fun classByName(name: String) = classes.find { it.name == name }
+
     override fun getProtocol() = "squeak"
 
     override fun findFileByPath(path: String): VirtualFile? {

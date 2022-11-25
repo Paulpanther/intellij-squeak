@@ -1,6 +1,7 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiManager
 import com.paulpanther.intellijsqueak.lang.definition.SmalltalkFileType
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 import javax.swing.Icon

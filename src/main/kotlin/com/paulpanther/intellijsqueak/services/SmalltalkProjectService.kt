@@ -5,6 +5,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemStructure
 
 @Service
 @State(name = "smalltalk-project-state")
@@ -12,6 +13,7 @@ class SmalltalkProjectService(
     private val project: Project
 ): PersistentStateComponent<SmalltalkProjectService.State> {
     private var state = State()
+    val structure = SmalltalkFileSystemStructure(project)
 
     data class State(
         val projectPackages: MutableList<String> = mutableListOf())

@@ -5,11 +5,9 @@ import com.intellij.ide.dnd.aware.DnDAwareTree
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.DataProvider
-import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
-import com.intellij.ui.PopupHandler
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.TreeSpeedSearch
 import com.intellij.ui.tree.AsyncTreeModel
@@ -19,20 +17,14 @@ import com.intellij.util.EditSourceOnEnterKeyHandler
 import com.intellij.util.ui.components.BorderLayoutPanel
 import com.intellij.util.ui.tree.TreeUtil
 import com.paulpanther.intellijsqueak.actions.FileSystemGroup
-import com.paulpanther.intellijsqueak.services.SmalltalkProjectService
+import com.paulpanther.intellijsqueak.services.smalltalkService
 import com.paulpanther.intellijsqueak.services.squeak
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
 import com.paulpanther.intellijsqueak.wsClient.SqueakClientStateListener
 
 class SmalltalkFileSystemView(
     project: Project,
-    private val useFilter: Boolean = false
 ): BorderLayoutPanel(), DumbAware, Disposable, DataProvider, SqueakClientStateListener {
-    private val fileSystem = SmalltalkVirtualFileSystem()
-
-    private val projectPackages by project.service<SmalltalkProjectService>().state::projectPackages
-
-    private val structure = SmalltalkFileSystemStructure(fileSystem, project, projectPackages, useFilter)
+    private val structure = project.smalltalkService.structure
     private val model = StructureTreeModel(structure, FolderNodeComparator(project), this)
     val tree = DnDAwareTree(AsyncTreeModel(model, this))
 
@@ -57,9 +49,9 @@ class SmalltalkFileSystemView(
         EditSourceOnEnterKeyHandler.install(tree)
         EditSourceOnDoubleClickHandler.install(tree)
         TreeSpeedSearch(tree)
-        FileSystemGroup(fileSystem, tree)
+        FileSystemGroup(squeak.fileSystem, tree)
 
-        fileSystem.onChange {
+        squeak.fileSystem.onChange {
             model.invalidate()
             repaint()
         }
@@ -84,7 +76,7 @@ class SmalltalkFileSystemView(
     }
 
     override fun onOpen() {
-        fileSystem.refresh(false)
+        squeak.fileSystem.refresh(false)
     }
 
     override fun onClose() {
