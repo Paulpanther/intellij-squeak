@@ -24,19 +24,23 @@ class FileSystemGroup(
                 NewFileAction("Class", "Package", file),
                 NewFileAction("Package", null, file.root),
                 RefreshFileAction("Package", file),
-                RemoveFileAction("Package", null, file))
+                RemoveFileAction("Package", file),
+                RenameFileAction("Package", file))
             is SmalltalkVirtualFileClass -> arrayOf(
                 NewFileAction("Category", "Class", file),
                 RefreshFileAction("Class", file),
-                RemoveFileAction("Class", "Package", file))
+                RemoveFileAction("Class", file),
+                RenameFileAction("Class", file))
             is SmalltalkVirtualFileCategory -> arrayOf(
                 NewFileAction("Method", "Category", file),
                 RefreshFileAction("Category", file),
-                RemoveFileAction("Category", "Class", file))
+                RemoveFileAction("Category", file),
+                RenameFileAction("Category", file))
             is SmalltalkVirtualFileMethod -> arrayOf(
                 NewFileAction("Method", "Category", file.category),
                 RefreshFileAction("Method", file),
-                RemoveFileAction("Method", "Category", file))
+                RemoveFileAction("Method", file),
+                RenameFileAction("Method", file))
             else -> arrayOf()
         }
     }

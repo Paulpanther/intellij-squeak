@@ -1,7 +1,6 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.paulpanther.intellijsqueak.services.squeak
-import javax.swing.Icon
 
 class SmalltalkVirtualFileRoot(
     system: SmalltalkVirtualFileSystem
@@ -20,6 +19,7 @@ class SmalltalkVirtualFileRoot(
     }
 
     override fun delete(requestor: Any?) {}
+    override fun renameFile(newName: String) {}
     override fun icon() = null
 
     override fun refresh(

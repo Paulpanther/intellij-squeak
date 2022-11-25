@@ -31,6 +31,28 @@ private class SqueakNewPackageAction(
     @SerializedName("package")
     val packageName: String)
 
+private class SqueakRenameMethodAction(
+    val method: String,
+    @SerializedName("class")
+    val clazz: String,
+    val newName: String)
+
+private class SqueakRenameCategoryAction(
+    val category: String,
+    @SerializedName("class")
+    val clazz: String,
+    val newName: String)
+
+private class SqueakRenameClassAction(
+    @SerializedName("class")
+    val clazz: String,
+    val newName: String)
+
+private class SqueakRenamePackageAction(
+    @SerializedName("package")
+    val packageName: String,
+    val newName: String)
+
 private class SqueakWriteFileAction(
     val file: String,
     @SerializedName("class")
@@ -107,6 +129,22 @@ class SqueakClient(parent: Disposable): WSClient(parent) {
 
     fun newPackage(packageName: String, callback: (success: Boolean) -> Unit) {
         sendAsync("new_package", SqueakNewPackageAction(packageName), callback)
+    }
+
+    fun renameMethod(clazz: String, method: String, newName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("rename_method", SqueakRenameMethodAction(method, clazz, newName), callback)
+    }
+
+    fun renameCategory(clazz: String, category: String, newName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("rename_category", SqueakRenameCategoryAction(category, clazz, newName), callback)
+    }
+
+    fun renameClass(clazz: String, newName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("rename_class", SqueakRenameClassAction(clazz, newName), callback)
+    }
+
+    fun renamePackage(packageName: String, newName: String, callback: (success: Boolean) -> Unit) {
+        sendAsync("rename_package", SqueakRenamePackageAction(packageName, newName), callback)
     }
 
     fun writeFile(clazz: String, file: String, content: String) {

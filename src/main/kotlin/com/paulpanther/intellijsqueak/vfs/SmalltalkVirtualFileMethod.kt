@@ -90,5 +90,13 @@ class SmalltalkVirtualFileMethod (
         }
     }
 
+    override fun renameFile(newName: String) {
+        squeak.client.renameMethod(clazz.name, name, newName) {
+            application.invokeLater {
+                category.refresh(true, false)
+            }
+        }
+    }
+
     override fun icon() = SmalltalkIcons.method
 }

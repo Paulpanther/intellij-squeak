@@ -42,6 +42,8 @@ sealed class SmalltalkVirtualFile(
 
     abstract override fun delete(requestor: Any?)
 
+    abstract fun renameFile(newName: String)
+
     abstract fun icon(): Icon?
 }
 

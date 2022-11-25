@@ -1,5 +1,6 @@
 package com.paulpanther.intellijsqueak.vfs
 
+import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 
@@ -37,6 +38,14 @@ class SmalltalkVirtualFileClass(
         squeak.client.refreshClass(this) {
             postRunnable?.run()
             fileSystem.callChangeListeners()
+        }
+    }
+
+    override fun renameFile(newName: String) {
+        squeak.client.renameClass(name, newName) {
+            application.invokeLater {
+                packageNode.refresh(true, false)
+            }
         }
     }
 }

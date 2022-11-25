@@ -12,7 +12,7 @@ class NewFileAction(
     private val parent: SmalltalkVirtualFileDirectory<*>,
 ): AnAction(
     "New $childName",
-    "Create a new $childName${parentName?.let { "for the selected $parentName" } ?: ""}",
+    "Create a new $childName${parentName?.let { " for the selected $parentName" } ?: ""}",
     parent.childIcon
 ) {
     override fun actionPerformed(e: AnActionEvent) {

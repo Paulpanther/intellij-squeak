@@ -3,18 +3,17 @@ package com.paulpanther.intellijsqueak.ui.dialog
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.dsl.builder.panel
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileDirectory
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
 import javax.swing.Action
 import javax.swing.JComponent
 
-class AddFileDialog(
+class RenameFileDialog(
     project: Project,
     childName: String,
-    parentName: String?,
-    private val parent: SmalltalkVirtualFileDirectory<*>
+    private val file: SmalltalkVirtualFile
 ): DialogWrapper(project, false) {
     init {
-        this.title = "Create $childName${parentName?.let { " for $parentName ${parent.name}" } ?: ""}"
+        this.title = "Rename $childName"
         init()
     }
 
@@ -25,13 +24,8 @@ class AddFileDialog(
             row {
                 val field = textField().component
                 field.addActionListener {
-                    val success = parent.createChild(field.text)
-                    if (success) {
-                        doOKAction()
-                    } else {
-                        // TODO
-                        println("Error")
-                    }
+                    file.renameFile(field.text)
+                    doOKAction()
                 }
             }
         }
