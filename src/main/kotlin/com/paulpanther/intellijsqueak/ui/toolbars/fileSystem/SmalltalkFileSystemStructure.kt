@@ -7,10 +7,7 @@ import com.intellij.ide.util.treeView.NodeDescriptor
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.ui.SimpleTextAttributes
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileMethod
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFilePackage
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.vfs.*
 
 
 class SmalltalkFileSystemNode(
@@ -47,7 +44,7 @@ class SmalltalkFileSystemNode(
     override fun canNavigate() = true
 
     override fun canNavigateToSource() =
-        file is SmalltalkVirtualFileMethod
+        file is SmalltalkVirtualFileMethod || file is SmalltalkVirtualFileClass
 
     override fun isAlwaysLeaf() =
         file is SmalltalkVirtualFileMethod

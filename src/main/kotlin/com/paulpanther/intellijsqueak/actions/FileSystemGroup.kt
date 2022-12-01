@@ -27,6 +27,7 @@ class FileSystemGroup(
                 RemoveFileAction("Package", file),
                 RenameFileAction("Package", file))
             is SmalltalkVirtualFileClass -> arrayOf(
+                OpenClassAction(file),
                 NewFileAction("Category", "Class", file),
                 RefreshFileAction("Class", file),
                 RemoveFileAction("Class", file),

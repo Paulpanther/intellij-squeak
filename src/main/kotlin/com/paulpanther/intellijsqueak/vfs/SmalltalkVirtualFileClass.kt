@@ -11,6 +11,8 @@ class SmalltalkVirtualFileClass(
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileCategory>(system, packageNode, name) {
     val categories get() = myChildren.toList()
 
+    override fun isDirectory() = false
+
     override fun createChild(name: String): Boolean {
         val canCreate = !categories.any { it.name == name }
         if (!canCreate) return false

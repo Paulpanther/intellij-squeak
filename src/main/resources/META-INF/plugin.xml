@@ -72,6 +72,8 @@
                 parentId="tools"
                 instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
                 displayName="Squeak/ Smalltalk"/>
+        <fileEditorProvider
+                implementation="com.paulpanther.intellijsqueak.editor.ClassFileEditorProvider" />
     </extensions>
     <actions>
         <group
@@ -92,9 +94,13 @@
                 id="com.paulpanther.intellijsqueak.actions.RefreshFileAction"
                 class="com.paulpanther.intellijsqueak.actions.RefreshFileAction"
                 text="Refresh File"/>
-        <action
-                id="com.paulpanther.intellijsqueak.actions.RenameFileAction"
-                class="com.paulpanther.intellijsqueak.actions.RenameFileAction"
-                text="Rename File"/>
+    <action
+            id="com.paulpanther.intellijsqueak.actions.RenameFileAction"
+            class="com.paulpanther.intellijsqueak.actions.RenameFileAction"
+            text="Rename File"/>
+    <action
+            id="com.paulpanther.intellijsqueak.actions.OpenClassAction"
+            class="com.paulpanther.intellijsqueak.actions.OpenClassAction"
+            text="Edit Class"/>
     </actions>
 </idea-plugin>
