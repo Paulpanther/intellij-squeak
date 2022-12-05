@@ -3,15 +3,21 @@ package com.paulpanther.intellijsqueak.vfs
 import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
+import com.paulpanther.intellijsqueak.util.listenableMutableListOf
 
 class SmalltalkVirtualFileClass(
     system: SmalltalkVirtualFileSystem,
     val packageNode: SmalltalkVirtualFilePackage,
     name: String
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileCategory>(system, packageNode, name) {
+    val instanceVariables = mutableListOf<String>()
+    val classVariables = listenableMutableListOf<String>()
+
     val categories get() = myChildren.toList()
 
     override fun isDirectory() = false
+
+    override fun getModificationStamp() = 0L
 
     override fun createChild(name: String): Boolean {
         val canCreate = !categories.any { it.name == name }
