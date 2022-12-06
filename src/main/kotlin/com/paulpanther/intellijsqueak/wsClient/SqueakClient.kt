@@ -90,6 +90,10 @@ private class SqueakRemovePackageAction(
     @SerializedName("package")
     val packageName: String)
 
+private class SqueakClassDataAction(
+    @SerializedName("class")
+    val clazz: String)
+
 data class SqueakRefreshFileSystemResult(
     val name: String,
     val children: List<SqueakRefreshFileSystemResult>)
@@ -214,6 +218,18 @@ class SqueakClient(parent: Disposable): WSClient(parent) {
         onMessageWithType("transcript") {
             listener(gson.fromJson(it, String::class.java))
         }
+    }
+
+    fun getClassVariables(clazz: SmalltalkVirtualFileClass): String? {
+        return sendBlocking("get_class_variables", SqueakClassDataAction(clazz.name))
+    }
+
+    fun getInstanceVariables(clazz: SmalltalkVirtualFileClass): String? {
+        return sendBlocking("get_instance_variables", SqueakClassDataAction(clazz.name))
+    }
+
+    fun getClassComment(clazz: SmalltalkVirtualFileClass): String? {
+        return sendBlocking("get_class_comment", SqueakClassDataAction(clazz.name))
     }
 
     private inline fun <reified T> sendAsync(action: String, msg: Any = "", crossinline callback: (msg: T) -> Unit) {

@@ -12,29 +12,15 @@ import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileClass
 import javax.swing.JComponent
 import javax.swing.JTextField
 
-class AddClassVariableDialog(
+fun createAddClassVariableDialog(
     project: Project,
-    private val clazz: SmalltalkVirtualFileClass
-): DialogWrapper(project, false) {
-    private val nameField = JBTextField()
-    val variableName: String get() = nameField.text
-
-    init {
-        title = "Add Class Variable"
-        init()
-    }
-
-    override fun doValidate() = when {
-        variableName == "" -> ValidationInfo("A name must be specified")
-        variableName in clazz.classVariables -> ValidationInfo("Name '$variableName' does already exist")
-        !isValidClassVariableName(variableName) -> ValidationInfo("Name '$variableName' is not a valid variable name")
-        else -> null
-    }
-
-    override fun createCenterPanel() = panel {
-        row {
-            cell(nameField)
-                .label("Variable name", LabelPosition.TOP)
+    clazz: SmalltalkVirtualFileClass
+) =
+    AddDialog(project, "Add Class Variable") { name ->
+        when {
+            name == "" -> ValidationInfo("A name must be specified")
+            name in clazz.classVariables -> ValidationInfo("Name '$name' does already exist")
+            !isValidClassVariableName(name) -> ValidationInfo("Name '$name' is not a valid variable name")
+            else -> null
         }
     }
-}

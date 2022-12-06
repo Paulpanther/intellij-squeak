@@ -10,8 +10,10 @@ class SmalltalkVirtualFileClass(
     val packageNode: SmalltalkVirtualFilePackage,
     name: String
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileCategory>(system, packageNode, name) {
-    val instanceVariables = mutableListOf<String>()
-    val classVariables = listenableMutableListOf<String>()
+    var comment: String by lazy { squeak.client.getClassComment(this) ?: "" }
+
+    val instanceVariables by lazy { squeak.client.getInstanceVariables(this)?.toMutableList() ?: mutableListOf() }
+    val classVariables by lazy { squeak.client.getClassVariables(this)?.toMutableList() ?: mutableListOf() }
 
     val categories get() = myChildren.toList()
 
