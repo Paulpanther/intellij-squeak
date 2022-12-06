@@ -3,14 +3,14 @@ package com.paulpanther.intellijsqueak.vfs
 import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
-import com.paulpanther.intellijsqueak.util.listenableMutableListOf
+import com.paulpanther.intellijsqueak.wsClient.SyncedProperty
 
 class SmalltalkVirtualFileClass(
     system: SmalltalkVirtualFileSystem,
     val packageNode: SmalltalkVirtualFilePackage,
     name: String
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileCategory>(system, packageNode, name) {
-    var comment: String by lazy { squeak.client.getClassComment(this) ?: "" }
+    var comment by SyncedProperty("", { squeak.client.getClassComment(this) }, { })
 
     val instanceVariables by lazy { squeak.client.getInstanceVariables(this)?.toMutableList() ?: mutableListOf() }
     val classVariables by lazy { squeak.client.getClassVariables(this)?.toMutableList() ?: mutableListOf() }

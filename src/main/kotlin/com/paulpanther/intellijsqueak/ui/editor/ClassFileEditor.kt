@@ -32,7 +32,7 @@ class ClassFileEditorPanel(
     private val file: SmalltalkVirtualFileClass
 ): JPanel() {
     private val classVariablesModel = CollectionListModel(file.classVariables)
-    private val instanceVariablesModel = CollectionListModel(file.classVariables)
+    private val instanceVariablesModel = CollectionListModel(file.instanceVariables)
     lateinit var panel: DialogPanel
 
     init {

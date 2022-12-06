@@ -220,11 +220,11 @@ class SqueakClient(parent: Disposable): WSClient(parent) {
         }
     }
 
-    fun getClassVariables(clazz: SmalltalkVirtualFileClass): String? {
+    fun getClassVariables(clazz: SmalltalkVirtualFileClass): List<String>? {
         return sendBlocking("get_class_variables", SqueakClassDataAction(clazz.name))
     }
 
-    fun getInstanceVariables(clazz: SmalltalkVirtualFileClass): String? {
+    fun getInstanceVariables(clazz: SmalltalkVirtualFileClass): List<String>? {
         return sendBlocking("get_instance_variables", SqueakClassDataAction(clazz.name))
     }
 
