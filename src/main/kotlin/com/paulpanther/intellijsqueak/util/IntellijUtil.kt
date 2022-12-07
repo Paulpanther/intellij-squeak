@@ -6,8 +6,6 @@ import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiManager
 import com.intellij.util.application
 
 /**
@@ -34,5 +32,3 @@ fun <T> runThread(
 }
 
 val Module.moduleType get() = ModuleType.get(this)
-
-fun VirtualFile.getPsiFile(project: Project) = PsiManager.getInstance(project).findFile(this)

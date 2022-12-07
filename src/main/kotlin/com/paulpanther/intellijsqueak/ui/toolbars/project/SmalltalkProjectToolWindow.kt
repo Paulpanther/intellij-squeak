@@ -12,7 +12,7 @@ class SmalltalkProjectToolWindow: ToolWindowFactory {
     ) {
         val manager = toolWindow.contentManager
         val content = manager.factory.createContent(
-            SmalltalkFileSystemView(project),
+            SmalltalkFileSystemView(project, true),
             null,
             false
         ).apply { isCloseable = false }

@@ -4,12 +4,13 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.util.treeView.AbstractTreeNode
 import com.intellij.ide.util.treeView.AbstractTreeStructure
 import com.intellij.ide.util.treeView.NodeDescriptor
-import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.ui.SimpleTextAttributes
-import com.paulpanther.intellijsqueak.services.squeak
-import com.paulpanther.intellijsqueak.vfs.*
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileMethod
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFilePackage
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
 
 
 class SmalltalkFileSystemNode(
@@ -18,13 +19,6 @@ class SmalltalkFileSystemNode(
     val parent: SmalltalkFileSystemNode?,
     private val structure: SmalltalkFileSystemStructure
 ) : AbstractTreeNode<String>(project, file.name) {
-    private val children by lazy {
-        file.children
-            .map {
-                SmalltalkFileSystemNode(project, it as SmalltalkVirtualFile, this, structure)
-            }.toMutableList()
-    }
-
 
     override fun update(presentation: PresentationData) {
         presentation.presentableText = file.name
@@ -35,16 +29,18 @@ class SmalltalkFileSystemNode(
         )
     }
 
-    fun findNodeWithFile(file: SmalltalkVirtualFile): SmalltalkFileSystemNode? {
-        if (this.file == file) return this
-        for (child in children) {
-            child.findNodeWithFile(file)?.let { return it }
+    override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
+        val children = if (structure.useFilter && file is SmalltalkVirtualFilePackage) {
+            file.children.filter { it.name in structure.packageFilter }
+        } else {
+            file.children.toList()
         }
-        return null
-    }
 
-    override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> =
-        children
+        return children
+            .map {
+                SmalltalkFileSystemNode(project, it as SmalltalkVirtualFile, this, structure)
+            }.toMutableList()
+    }
 
     override fun getVirtualFile() = file
 
@@ -61,22 +57,15 @@ class SmalltalkFileSystemNode(
 }
 
 class SmalltalkFileSystemStructure(
+    private val system: SmalltalkVirtualFileSystem,
     private val project: Project,
-) : AbstractTreeStructure() {
-    private val root by lazy {
-        SmalltalkFileSystemNode(
-            project,
-            squeak.fileSystem.root,
-            null,
-            this
-        )
-    }
+    val packageFilter: List<String> = listOf(),
+    val useFilter: Boolean = false
+): AbstractTreeStructure() {
 
-    fun navigatableForClass(clazz: SmalltalkVirtualFileClass): NavigationItem? {
-        return root.findNodeWithFile(clazz)
+    override fun getRootElement(): Any {
+        return SmalltalkFileSystemNode(project, system.root, null, this)
     }
-
-    override fun getRootElement() = root
 
     override fun getChildElements(element: Any): Array<Any> {
         val node = element as? AbstractTreeNode<*> ?: return arrayOf()
@@ -95,8 +84,14 @@ class SmalltalkFileSystemStructure(
         return element as NodeDescriptor<*>
     }
 
-    fun allNavigatables() =
-        arrayOf(OpenFileDescriptor(project, rootElement.file))
+    fun allNavigatables(): Array<OpenFileDescriptor> {
+        return arrayOf(
+            OpenFileDescriptor(
+                project,
+                (rootElement as SmalltalkFileSystemNode).file
+            )
+        )
+    }
 
     override fun commit() = Unit
     override fun hasSomethingToCommit() = false

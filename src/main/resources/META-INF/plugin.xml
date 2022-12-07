@@ -72,8 +72,6 @@
                 parentId="tools"
                 instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
                 displayName="Squeak/ Smalltalk"/>
-        <gotoClassContributor
-                implementation="com.paulpanther.intellijsqueak.editor.SmalltalkGotoClassContributor"/>
     </extensions>
     <actions>
         <group
