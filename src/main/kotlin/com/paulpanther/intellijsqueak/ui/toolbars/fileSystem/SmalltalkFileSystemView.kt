@@ -28,7 +28,7 @@ class SmalltalkFileSystemView(
     project: Project,
     private val useFilter: Boolean = false
 ): BorderLayoutPanel(), DumbAware, Disposable, DataProvider, SqueakClientStateListener {
-    private val fileSystem = SmalltalkVirtualFileSystem()
+    private val fileSystem = squeak.fileSystem
 
     private val projectPackages by project.service<SmalltalkProjectService>().state::projectPackages
 

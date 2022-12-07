@@ -14,6 +14,12 @@ class SmalltalkVirtualFileSystem: VirtualFileSystem() {
         refresh(true)
     }
 
+    fun classWithName(name: String): SmalltalkVirtualFileClass? {
+        return root.packages
+            .flatMap { it.classes }
+            .find { it.name == name }
+    }
+
     override fun getProtocol() = "squeak"
 
     override fun findFileByPath(path: String): VirtualFile? {
