@@ -23,6 +23,7 @@ import com.paulpanther.intellijsqueak.services.SmalltalkProjectService
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
 import com.paulpanther.intellijsqueak.wsClient.SqueakClientStateListener
+import javax.swing.tree.TreePath
 
 class SmalltalkFileSystemView(
     project: Project,
@@ -32,7 +33,7 @@ class SmalltalkFileSystemView(
 
     private val projectPackages by project.service<SmalltalkProjectService>().state::projectPackages
 
-    private val structure = SmalltalkFileSystemStructure(fileSystem, project, projectPackages, useFilter)
+    private val structure = SmalltalkFileSystemStructure(fileSystem, project, projectPackages, useFilter, this::selectNode)
     private val model = StructureTreeModel(structure, FolderNodeComparator(project), this)
     val tree = DnDAwareTree(AsyncTreeModel(model, this))
 
@@ -63,6 +64,10 @@ class SmalltalkFileSystemView(
             model.invalidate()
             repaint()
         }
+    }
+
+    fun selectNode(node: SmalltalkFileSystemNode, requestFocus: Boolean) {
+        model.select(node, tree) {}
     }
 
     override fun dispose() {

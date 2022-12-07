@@ -17,6 +17,10 @@ class SmalltalkFileSystemNode(
     private val structure: SmalltalkFileSystemStructure
 ) : AbstractTreeNode<String>(project, file.name) {
 
+    init {
+        file.currentNode = this
+    }
+
     override fun update(presentation: PresentationData) {
         presentation.presentableText = file.name
         presentation.setIcon(file.icon())
@@ -49,6 +53,10 @@ class SmalltalkFileSystemNode(
     override fun isAlwaysLeaf() =
         file is SmalltalkVirtualFileMethod
 
+    override fun navigate(requestFocus: Boolean) {
+        structure.selectNode(this, requestFocus)
+    }
+
     fun toOpenFileDescriptor() =
         OpenFileDescriptor(project, virtualFile)
 }
@@ -57,7 +65,8 @@ class SmalltalkFileSystemStructure(
     private val system: SmalltalkVirtualFileSystem,
     private val project: Project,
     val packageFilter: List<String> = listOf(),
-    val useFilter: Boolean = false
+    val useFilter: Boolean = false,
+    val selectNode: (node: SmalltalkFileSystemNode, requestFocus: Boolean) -> Unit
 ): AbstractTreeStructure() {
 
     override fun getRootElement(): Any {

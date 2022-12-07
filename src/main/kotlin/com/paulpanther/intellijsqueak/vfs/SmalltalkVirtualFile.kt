@@ -1,5 +1,6 @@
 package com.paulpanther.intellijsqueak.vfs
 
+import com.intellij.ide.util.treeView.AbstractTreeNode
 import com.intellij.openapi.vfs.VirtualFile
 import com.paulpanther.intellijsqueak.lang.definition.SmalltalkFileType
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
@@ -10,6 +11,8 @@ sealed class SmalltalkVirtualFile(
     private val myParent: SmalltalkVirtualFile?,
     protected var myName: String
 ): VirtualFile() {
+    var currentNode: AbstractTreeNode<String>? = null
+
     override fun getFileSystem() = mySystem
 
     override fun getFileType() = SmalltalkFileType()
