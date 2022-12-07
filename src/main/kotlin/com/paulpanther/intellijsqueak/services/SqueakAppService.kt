@@ -2,6 +2,8 @@ package com.paulpanther.intellijsqueak.services
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.*
+import com.paulpanther.intellijsqueak.ui.toolbars.fileSystem.SmalltalkFileSystemView
+import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
 import com.paulpanther.intellijsqueak.wsClient.SqueakClient
 import java.io.File
 
@@ -10,6 +12,8 @@ import java.io.File
     name = "squeak-app-state",
     storages = [Storage("SqueakPluginApp.xml")])
 class SqueakAppService: Disposable, PersistentStateComponent<SqueakAppService.State> {
+    val fileSystem by lazy { SmalltalkVirtualFileSystem() }
+
     val client = SqueakClient(this)
     private var state = State()
     private val enabledListeners = mutableListOf<(enabled: Boolean) -> Unit>()

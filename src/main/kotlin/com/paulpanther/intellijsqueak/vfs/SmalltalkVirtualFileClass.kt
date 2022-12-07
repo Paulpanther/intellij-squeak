@@ -3,13 +3,23 @@ package com.paulpanther.intellijsqueak.vfs
 import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
+import com.paulpanther.intellijsqueak.wsClient.SyncedProperty
 
 class SmalltalkVirtualFileClass(
     system: SmalltalkVirtualFileSystem,
     val packageNode: SmalltalkVirtualFilePackage,
     name: String
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileCategory>(system, packageNode, name) {
+    var comment by SyncedProperty("", { squeak.client.getClassComment(this) }, { })
+
+    val instanceVariables by lazy { squeak.client.getInstanceVariables(this)?.toMutableList() ?: mutableListOf() }
+    val classVariables by lazy { squeak.client.getClassVariables(this)?.toMutableList() ?: mutableListOf() }
+
     val categories get() = myChildren.toList()
+
+    override fun isDirectory() = false
+
+    override fun getModificationStamp() = 0L
 
     override fun createChild(name: String): Boolean {
         val canCreate = !categories.any { it.name == name }

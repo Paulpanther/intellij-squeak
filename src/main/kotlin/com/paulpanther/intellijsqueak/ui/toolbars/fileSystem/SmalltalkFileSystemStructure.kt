@@ -7,10 +7,7 @@ import com.intellij.ide.util.treeView.NodeDescriptor
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.ui.SimpleTextAttributes
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFile
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileMethod
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFilePackage
-import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileSystem
+import com.paulpanther.intellijsqueak.vfs.*
 
 
 class SmalltalkFileSystemNode(
@@ -19,6 +16,10 @@ class SmalltalkFileSystemNode(
     val parent: SmalltalkFileSystemNode?,
     private val structure: SmalltalkFileSystemStructure
 ) : AbstractTreeNode<String>(project, file.name) {
+
+    init {
+        file.currentNode = this
+    }
 
     override fun update(presentation: PresentationData) {
         presentation.presentableText = file.name
@@ -47,10 +48,14 @@ class SmalltalkFileSystemNode(
     override fun canNavigate() = true
 
     override fun canNavigateToSource() =
-        file is SmalltalkVirtualFileMethod
+        file is SmalltalkVirtualFileMethod || file is SmalltalkVirtualFileClass
 
     override fun isAlwaysLeaf() =
         file is SmalltalkVirtualFileMethod
+
+    override fun navigate(requestFocus: Boolean) {
+        structure.selectNode(this, requestFocus)
+    }
 
     fun toOpenFileDescriptor() =
         OpenFileDescriptor(project, virtualFile)
@@ -60,7 +65,8 @@ class SmalltalkFileSystemStructure(
     private val system: SmalltalkVirtualFileSystem,
     private val project: Project,
     val packageFilter: List<String> = listOf(),
-    val useFilter: Boolean = false
+    val useFilter: Boolean = false,
+    val selectNode: (node: SmalltalkFileSystemNode, requestFocus: Boolean) -> Unit
 ): AbstractTreeStructure() {
 
     override fun getRootElement(): Any {

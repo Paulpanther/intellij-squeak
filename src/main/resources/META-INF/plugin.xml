@@ -72,6 +72,10 @@
                 parentId="tools"
                 instance="com.paulpanther.intellijsqueak.settings.SqueakToolsConfigurable"
                 displayName="Squeak/ Smalltalk"/>
+        <fileEditorProvider
+                implementation="com.paulpanther.intellijsqueak.editor.ClassFileEditorProvider"/>
+        <gotoClassContributor
+                implementation="com.paulpanther.intellijsqueak.editor.SmalltalkGoToClassContributor"/>
     </extensions>
     <actions>
         <group
@@ -79,6 +83,13 @@
                 class="com.paulpanther.intellijsqueak.actions.FileSystemGroup"
                 text="File System Actions"
                 popup="true">
+        </group>
+        <group
+                id="Smalltalk.EditClassVariablesGroup"
+                text="Edit Class Variables">
+            <action
+                    id="Smalltalk.AddClassVariableAction"
+                    class="com.paulpanther.intellijsqueak.actions.AddClassVariableAction"/>
         </group>
         <action
                 id="com.paulpanther.intellijsqueak.actions.NewFileAction"

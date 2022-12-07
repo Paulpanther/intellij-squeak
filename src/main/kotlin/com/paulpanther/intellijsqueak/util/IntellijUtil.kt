@@ -1,5 +1,7 @@
 package com.paulpanther.intellijsqueak.util
 
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleType
 import com.intellij.openapi.progress.ProgressIndicator
@@ -7,6 +9,8 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.util.application
+import java.awt.Component
+import java.awt.event.InputEvent
 
 /**
  * Starts a new Thread and displays the progress in the UI
@@ -32,3 +36,7 @@ fun <T> runThread(
 }
 
 val Module.moduleType get() = ModuleType.get(this)
+
+fun Component.executeAction(action: AnAction, place: String, inputEvent: InputEvent? = null, now: Boolean = true) {
+    ActionManager.getInstance().tryToExecute(action, inputEvent, this, place, now)
+}

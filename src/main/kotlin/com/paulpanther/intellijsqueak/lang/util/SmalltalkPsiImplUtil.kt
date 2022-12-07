@@ -7,6 +7,7 @@ import com.paulpanther.intellijsqueak.lang.SmalltalkBlockArgument
 import com.paulpanther.intellijsqueak.lang.SmalltalkNamedIdentifier
 import com.paulpanther.intellijsqueak.lang.SmalltalkVariable
 import com.paulpanther.intellijsqueak.lang.references.SmalltalkArgumentVariableReference
+import com.paulpanther.intellijsqueak.lang.references.SmalltalkClassReference
 import com.paulpanther.intellijsqueak.lang.references.SmalltalkTemporaryVariableReference
 
 object SmalltalkPsiImplUtil {
@@ -44,6 +45,7 @@ object SmalltalkPsiImplUtil {
     fun getReferences(variable: SmalltalkVariable): Array<PsiReferenceBase<PsiElement>> {
         return arrayOf(
             SmalltalkTemporaryVariableReference(variable),
+            SmalltalkClassReference(variable),
             SmalltalkArgumentVariableReference(variable),
         )
     }
