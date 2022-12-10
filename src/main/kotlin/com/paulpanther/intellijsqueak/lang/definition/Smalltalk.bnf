@@ -71,7 +71,11 @@ return ::= RETURN_OPERATOR expr
 
 expr ::= unary_message_expr | assignment_expr | keyword_message_expr | binary_message_expr | cascade_expr | primary
 
-unary_message_expr ::= expr IDENTIFIER
+unary_message_expr ::= expr unary_message_identifier
+
+unary_message_identifier ::= IDENTIFIER {
+    methods=[getReferences]
+}
 
 keyword_message_expr ::= expr keyword_part+
 

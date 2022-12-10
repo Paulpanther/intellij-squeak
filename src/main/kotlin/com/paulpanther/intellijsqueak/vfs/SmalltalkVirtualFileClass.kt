@@ -17,7 +17,10 @@ class SmalltalkVirtualFileClass(
 
     val categories get() = myChildren.toList()
 
-    override fun isDirectory() = false
+    val instanceMethods get() = categories.flatMap { it.methods }
+    val classMethods get() = listOf<SmalltalkVirtualFileMethod>()
+
+//    override fun isDirectory() = false
 
     override fun getModificationStamp() = 0L
 

@@ -1,7 +1,10 @@
 package com.paulpanther.intellijsqueak.vfs
 
 import com.intellij.openapi.fileEditor.FileDocumentManager
+import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiManager
 import com.intellij.util.application
+import com.paulpanther.intellijsqueak.lang.SmalltalkMethod
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
 import java.io.InputStream
@@ -25,6 +28,8 @@ class SmalltalkVirtualFileMethod (
     private val content get() = modifiedContent ?: originalContent
 
     val clazz get() = category.classNode
+
+    fun findPsiMethod(project: Project) = PsiManager.getInstance(project).findFile(this)?.firstChild as? SmalltalkMethod
 
     override fun findFile(path: List<String>): SmalltalkVirtualFile? {
         return if (path.isEmpty()) this else null

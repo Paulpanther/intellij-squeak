@@ -1,5 +1,7 @@
 package com.paulpanther.intellijsqueak.lang.references
 
+import com.intellij.codeInsight.lookup.AutoCompletionPolicy
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
@@ -17,4 +19,14 @@ class SmalltalkClassReference(
     }
 
     override fun getRangeInElement() = TextRange(0, element.textLength)
+
+    override fun getVariants(): Array<Any> {
+        val classNames = squeak.fileSystem.classes.map { it.name }
+
+        return classNames.map {
+            LookupElementBuilder
+                .create(it)
+                .withAutoCompletionPolicy(AutoCompletionPolicy.SETTINGS_DEPENDENT)
+        }.toTypedArray()
+    }
 }

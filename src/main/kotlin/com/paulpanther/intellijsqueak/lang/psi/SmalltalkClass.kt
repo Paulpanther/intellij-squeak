@@ -8,7 +8,7 @@ import com.paulpanther.intellijsqueak.vfs.SmalltalkVirtualFileClass
 
 class SmalltalkClass(
     project: Project,
-    private val classFile: SmalltalkVirtualFileClass
+    val classFile: SmalltalkVirtualFileClass
 ): PsiDirectoryImpl(PsiManager.getInstance(project) as PsiManagerImpl, classFile) {
 
     override fun navigate(requestFocus: Boolean) {

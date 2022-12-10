@@ -1,5 +1,6 @@
 package com.paulpanther.intellijsqueak.lang.references
 
+import com.intellij.codeInsight.lookup.AutoCompletionPolicy
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -38,7 +39,9 @@ class SmalltalkArgumentVariableReference(
         val arguments = method.keywordSelector?.argumentList ?: return arrayOf()
 
         return arguments.map {
-            LookupElementBuilder.create(it)
+            LookupElementBuilder
+                .create(it.text)
+                .withAutoCompletionPolicy(AutoCompletionPolicy.SETTINGS_DEPENDENT)
         }.toTypedArray()
     }
 }

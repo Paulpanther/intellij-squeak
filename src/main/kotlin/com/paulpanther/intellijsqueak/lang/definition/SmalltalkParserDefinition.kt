@@ -7,6 +7,7 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
+import com.intellij.util.indexing.IndexingDataKeys
 import com.paulpanther.intellijsqueak.lang.SmalltalkTypes
 import com.paulpanther.intellijsqueak.lang.psi.SmalltalkFile
 
@@ -24,6 +25,9 @@ class SmalltalkParserDefinition: ParserDefinition {
 
     override fun createElement(node: ASTNode?): PsiElement =
         SmalltalkTypes.Factory.createElement(node)
+
     override fun createFile(viewProvider: FileViewProvider) =
-        SmalltalkFile(viewProvider)
+        SmalltalkFile(viewProvider).also {
+            it.putUserData(IndexingDataKeys.VIRTUAL_FILE, viewProvider.virtualFile)
+        }
 }
