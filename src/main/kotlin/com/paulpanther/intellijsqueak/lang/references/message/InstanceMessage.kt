@@ -27,6 +27,6 @@ class InstanceMessage(
     }
 
     override fun getVariants(): List<String>? {
-        return getReferencedClass()?.classMethods?.map { it.name }
+        return getReferencedClass()?.instanceMethods?.map { it.name }
     }
 }
