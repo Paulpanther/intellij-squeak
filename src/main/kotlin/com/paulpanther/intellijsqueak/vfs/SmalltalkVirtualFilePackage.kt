@@ -16,7 +16,7 @@ class SmalltalkVirtualFilePackage(
         val canCreate = validClassName && !classes.any { it.name == name }
         if (!canCreate) return false
 
-        squeak.client.newClass(this.name, name) {
+        squeak.client.newClass(this, name) {
             refresh(true, false)
         }
 
@@ -24,7 +24,7 @@ class SmalltalkVirtualFilePackage(
     }
 
     override fun delete(requestor: Any?) {
-        squeak.client.removePackage(name) {
+        squeak.client.removePackage(this) {
             root.refresh(true, false)
         }
     }
@@ -43,7 +43,7 @@ class SmalltalkVirtualFilePackage(
     }
 
     override fun renameFile(newName: String) {
-        squeak.client.renamePackage(name, newName) {
+        squeak.client.renamePackage(this, newName) {
             application.invokeLater {
                 root.refresh(true, false)
             }

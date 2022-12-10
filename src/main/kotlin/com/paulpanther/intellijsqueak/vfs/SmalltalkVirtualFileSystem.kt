@@ -1,5 +1,10 @@
 package com.paulpanther.intellijsqueak.vfs
 
+import com.intellij.openapi.module.ModuleManager
+import com.intellij.openapi.module.ModuleUtil
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ModuleRootModificationUtil
+import com.intellij.openapi.roots.libraries.ui.impl.RootDetectionUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileListener
 import com.intellij.openapi.vfs.VirtualFileSystem
@@ -7,8 +12,9 @@ import com.paulpanther.intellijsqueak.services.squeak
 
 class SmalltalkVirtualFileSystem: VirtualFileSystem() {
     private val listeners = mutableListOf<VirtualFileListener>()
-    var root = SmalltalkVirtualFileRoot(this)
     private val changeListeners = mutableListOf<() -> Unit>()
+
+    var root = SmalltalkVirtualFileRoot(this)
 
     init {
         refresh(true)
@@ -18,6 +24,14 @@ class SmalltalkVirtualFileSystem: VirtualFileSystem() {
 
     fun classWithName(name: String): SmalltalkVirtualFileClass? {
         return classes.find { it.name == name }
+    }
+
+    fun updateRoot(project: Project) {
+        if (ModuleUtil.findModuleForFile(root, project) != null) return
+        val module = ModuleManager.getInstance(project).modules.firstOrNull()
+        if (module != null) {
+            ModuleRootModificationUtil.addContentRoot(module, root)
+        }
     }
 
     override fun getProtocol() = "squeak"

@@ -10,7 +10,6 @@ class SmalltalkFile(viewProvider: FileViewProvider): PsiFileBase(viewProvider, S
     override fun getFileType() = SmalltalkFileType()
 
     override fun <T : Any?> putUserData(key: Key<T>, value: T?) {
-        println(key)
         super.putUserData(key, value)
     }
 }

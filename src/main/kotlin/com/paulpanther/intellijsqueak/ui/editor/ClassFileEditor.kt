@@ -38,15 +38,15 @@ class ClassFileEditorPanel(
     init {
         panel = panel {
             onReset {
-                classVariablesModel.replaceWith(file.classVariables)
-                instanceVariablesModel.replaceWith(file.instanceVariables)
+//                classVariablesModel.replaceWith(file.classVariables)
+//                instanceVariablesModel.replaceWith(file.instanceVariables)
 
                 repaint()
             }
 
             onApply {
-                file.classVariables.replaceWith(classVariablesModel)
-                file.instanceVariables.replaceWith(instanceVariablesModel)
+//                file.classVariables.replaceWith(classVariablesModel)
+//                file.instanceVariables.replaceWith(instanceVariablesModel)
             }
 
             val classVariablesList = ToolbarDecorator

@@ -20,7 +20,7 @@ class SmalltalkVirtualFileMethod (
         if (_originalContentOrNull != null) {
             _originalContentOrNull
         } else {
-            _originalContentOrNull = squeak.client.fileContent(clazz.name, name)
+            _originalContentOrNull = squeak.client.fileContent(clazz, this)
             _originalContentOrNull
         }
 
@@ -28,6 +28,8 @@ class SmalltalkVirtualFileMethod (
     private val content get() = modifiedContent ?: originalContent
 
     val clazz get() = category.classNode
+
+    val isInstance get() = category.isInstance
 
     fun findPsiMethod(project: Project) = PsiManager.getInstance(project).findFile(this)?.firstChild as? SmalltalkMethod
 
@@ -51,7 +53,7 @@ class SmalltalkVirtualFileMethod (
 
             val formattedContent = content.lines().joinToString("\r", transform = ::replaceSpacesWithTabs)
 
-            if (squeak.client.open) squeak.client.writeFile(clazz.name, name, formattedContent)
+            if (squeak.client.open) squeak.client.writeFile(clazz, this, formattedContent)
             modifiedContent = content
         }
         return OutputStream.nullOutputStream()
@@ -88,7 +90,7 @@ class SmalltalkVirtualFileMethod (
     }
 
     override fun delete(requestor: Any?) {
-        squeak.client.removeMethod(clazz.name, name) {
+        squeak.client.removeMethod(clazz, this) {
             application.invokeLater {
                 category.refresh(true, false)
             }
@@ -96,7 +98,7 @@ class SmalltalkVirtualFileMethod (
     }
 
     override fun renameFile(newName: String) {
-        squeak.client.renameMethod(clazz.name, name, newName) {
+        squeak.client.renameMethod(clazz, this, newName) {
             application.invokeLater {
                 category.refresh(true, false)
             }

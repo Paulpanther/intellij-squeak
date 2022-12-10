@@ -8,6 +8,7 @@ class SmalltalkVirtualFileCategory(
     system: SmalltalkVirtualFileSystem,
     val classNode: SmalltalkVirtualFileClass,
     name: String,
+    val isInstance: Boolean
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileMethod>(system, classNode, name) {
     val methods get() = myChildren.toList()
 
@@ -23,7 +24,7 @@ class SmalltalkVirtualFileCategory(
         val canCreate = (binaryMethodName || unaryMethodName || keywordMethodName) && !methods.any { it.name == sanitizedName }
         if (!canCreate) return false
 
-        squeak.client.newMethod(classNode.name, this.name, sanitizedName) {
+        squeak.client.newMethod(classNode, this, sanitizedName) {
             refresh(true, false)
         }
 
@@ -31,12 +32,14 @@ class SmalltalkVirtualFileCategory(
     }
 
     override fun delete(requestor: Any?) {
-        squeak.client.removeCategory(classNode.name, name) {
+        squeak.client.removeCategory(classNode, this) {
             classNode.refresh(true, false)
         }
     }
 
-    override fun icon() = SmalltalkIcons.categoryInstance
+    override fun icon() =
+        if (isInstance) SmalltalkIcons.categoryInstance
+        else SmalltalkIcons.categoryClass
 
     override fun refresh(
         asynchronous: Boolean,
@@ -50,7 +53,7 @@ class SmalltalkVirtualFileCategory(
     }
 
     override fun renameFile(newName: String) {
-        squeak.client.renameCategory(classNode.name, name, newName) {
+        squeak.client.renameCategory(classNode, this, newName) {
             application.invokeLater {
                 classNode.refresh(true, false)
             }

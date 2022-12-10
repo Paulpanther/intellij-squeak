@@ -3,22 +3,19 @@ package com.paulpanther.intellijsqueak.vfs
 import com.intellij.util.application
 import com.paulpanther.intellijsqueak.services.squeak
 import com.paulpanther.intellijsqueak.ui.SmalltalkIcons
-import com.paulpanther.intellijsqueak.wsClient.SyncedProperty
 
 class SmalltalkVirtualFileClass(
     system: SmalltalkVirtualFileSystem,
     val packageNode: SmalltalkVirtualFilePackage,
-    name: String
+    name: String,
+    var comment: String,
+    val instanceVariables: List<String>,
+    val classVariables: List<String>,
 ): SmalltalkVirtualFileDirectory<SmalltalkVirtualFileCategory>(system, packageNode, name) {
-    var comment by SyncedProperty("", { squeak.client.getClassComment(this) }, { })
-
-    val instanceVariables by lazy { squeak.client.getInstanceVariables(this)?.toMutableList() ?: mutableListOf() }
-    val classVariables by lazy { squeak.client.getClassVariables(this)?.toMutableList() ?: mutableListOf() }
-
     val categories get() = myChildren.toList()
 
-    val instanceMethods get() = categories.flatMap { it.methods }
-    val classMethods get() = listOf<SmalltalkVirtualFileMethod>()
+    val instanceMethods get() = categories.filter { it.isInstance }.flatMap { it.methods }
+    val classMethods get() = categories.filter { !it.isInstance }.flatMap { it.methods }
 
 //    override fun isDirectory() = false
 
@@ -28,7 +25,7 @@ class SmalltalkVirtualFileClass(
         val canCreate = !categories.any { it.name == name }
         if (!canCreate) return false
 
-        squeak.client.newCategory(this.name, name) {
+        squeak.client.newCategory(this, name, true) {
             refresh(true, false)
         }
 
@@ -36,7 +33,7 @@ class SmalltalkVirtualFileClass(
     }
 
     override fun delete(requestor: Any?) {
-        squeak.client.removeClass(this.name) {
+        squeak.client.removeClass(this) {
             packageNode.refresh(true, false)
         }
     }
@@ -55,7 +52,7 @@ class SmalltalkVirtualFileClass(
     }
 
     override fun renameFile(newName: String) {
-        squeak.client.renameClass(name, newName) {
+        squeak.client.renameClass(this, newName) {
             application.invokeLater {
                 packageNode.refresh(true, false)
             }
